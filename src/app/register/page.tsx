@@ -7,17 +7,10 @@ import { Input, Checkbox, Button, Typography } from "@material-tailwind/react";
 export function SignIn() {
   return (
     <section className="m-8 flex gap-4">
-      <div className="w-2/5 h-full hidden lg:block">
-        <img
-          src="https://i.imgur.com/U3QktuO.jpeg"
-          className="h-full w-full object-cover rounded-3xl"
-        />
-      </div>
-
       <div className="w-full lg:w-3/5 mt-24">
         <div className="text-center">
           <Typography variant="h2" className="font-bold mb-4">
-            Sign In
+            Register
           </Typography>
           <Typography
             variant="paragraph"
@@ -91,6 +84,13 @@ export function SignIn() {
           <div className="space-y-4 mt-8"></div>
           <SignInRedirect />
         </form>
+      </div>
+
+      <div className="w-2/5 max-h-[820px] hidden lg:block">
+        <img
+          src="https://i.imgur.com/zykDNnE.jpeg"
+          className="h-full w-full object-cover rounded-3xl"
+        />
       </div>
     </section>
   );
