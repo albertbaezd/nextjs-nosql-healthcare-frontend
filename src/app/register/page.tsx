@@ -1,10 +1,62 @@
 "use client";
 // page.tsx
-import { SignInRedirect } from "../../components/sign-in-redirect"; // Import the new redirect component
+import { SignInRedirect } from "../../components/sign-in-redirect";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { Input, Button, Typography } from "@material-tailwind/react";
+import axios from "axios";
 
-import { Input, Checkbox, Button, Typography } from "@material-tailwind/react";
+const validationSchema = Yup.object({
+  userName: Yup.string().required("User name is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(8, "Password must be at least 8 characters")
+    .required("Password is required"),
+  userType: Yup.string().required("User type is required"),
+});
 
-export function SignIn() {
+export function Register() {
+  const formik = useFormik({
+    initialValues: {
+      userName: "",
+      email: "",
+      password: "",
+      userType: "",
+    },
+    validationSchema, // Adding Yup validation
+    onSubmit: async (values) => {
+      // Your submit logic goes here
+      console.log("Form submitted", values);
+
+      try {
+        // Make a POST request to your registration endpoint using Axios
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+          {
+            name: values.userName,
+            email: values.email,
+            password: values.password,
+            role: values.userType,
+          }
+        );
+
+        // Handle the response if the registration is successful
+        if (response.status === 200) {
+          console.log("Registration successful");
+          // Handle success (e.g., redirect, store token, etc.)
+        } else {
+          console.error(response.status);
+          // Handle failure
+        }
+      } catch (error) {
+        // Handle error (e.g., display error message)
+        console.error("An error occurred during registration:", error);
+      }
+    },
+  });
+
   return (
     <section className="m-8 flex gap-4">
       <div className="w-full lg:w-3/5 mt-24">
@@ -20,8 +72,38 @@ export function SignIn() {
             Enter your email and password to Sign In.
           </Typography>
         </div>
-        <form className="mt-8 mb-2 mx-auto w-80 max-w-screen-lg lg:w-1/2">
+        <form
+          className="mt-8 mb-2 mx-auto w-80 max-w-screen-lg lg:w-1/2"
+          onSubmit={formik.handleSubmit}
+        >
+          {/* Email Input */}
           <div className="mb-1 flex flex-col gap-6">
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="-mb-3 font-medium"
+            >
+              Name
+            </Typography>
+            <Input
+              size="lg"
+              placeholder="John Doe"
+              name="userName" // Bind the input to Formik's state
+              value={formik.values.userName} // Formik's value
+              onChange={formik.handleChange} // Formik's handleChange
+              onBlur={formik.handleBlur} // Formik's handleBlur
+              className={`${
+                formik.touched.userName && formik.errors.userName
+                  ? "border-red-500"
+                  : "border-gray-300"
+              }`}
+            />
+            {formik.touched.userName && formik.errors.userName && (
+              <div className="text-red-500 text-sm">
+                {formik.errors.userName}
+              </div>
+            )}
+
             <Typography
               variant="small"
               color="blue-gray"
@@ -32,11 +114,21 @@ export function SignIn() {
             <Input
               size="lg"
               placeholder="name@mail.com"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
+              name="email" // Bind the input to Formik's state
+              value={formik.values.email} // Formik's value
+              onChange={formik.handleChange} // Formik's handleChange
+              onBlur={formik.handleBlur} // Formik's handleBlur
+              className={`${
+                formik.touched.email && formik.errors.email
+                  ? "border-red-500"
+                  : "border-gray-300"
+              }`}
             />
+            {formik.touched.email && formik.errors.email && (
+              <div className="text-red-500 text-sm">{formik.errors.email}</div>
+            )}
+
+            {/* Password Input */}
             <Typography
               variant="small"
               color="blue-gray"
@@ -48,45 +140,59 @@ export function SignIn() {
               type="password"
               size="lg"
               placeholder="********"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
+              name="password" // Bind the input to Formik's state
+              value={formik.values.password} // Formik's value
+              onChange={formik.handleChange} // Formik's handleChange
+              onBlur={formik.handleBlur} // Formik's handleBlur
+              className={`${
+                formik.touched.password && formik.errors.password
+                  ? "border-red-500"
+                  : "border-gray-300"
+              }`}
             />
-          </div>
-          <Checkbox
-            label={
-              <Typography
-                variant="small"
-                color="gray"
-                className="flex items-center justify-start font-medium"
-              >
-                I agree the&nbsp;
-                <a
-                  href="#"
-                  className="font-normal text-black transition-colors hover:text-gray-900 underline"
-                >
-                  Terms and Conditions
-                </a>
-              </Typography>
-            }
-            containerProps={{ className: "-ml-2.5" }}
-          />
-          <Button className="mt-6" fullWidth>
-            Sign In
-          </Button>
 
-          <div className="flex items-center justify-between mt-6">
-            <Typography variant="small" className="font-medium text-gray-900">
-              <a href="#">Forgot Password?</a>
+            {formik.touched.password && formik.errors.password && (
+              <div className="text-red-500 text-sm">
+                {formik.errors.password}
+              </div>
+            )}
+
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="-mb-3 font-medium"
+            >
+              Select User Type
             </Typography>
+            <select
+              name="userType"
+              value={formik.values.userType}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={`border border-gray-400 ${
+                formik.touched.userType && formik.errors.userType
+                  ? "border-red-500"
+                  : ""
+              } p-[0.8rem] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            >
+              <option value="individual" label="Individual" />
+              <option value="doctor" label="Doctor" />
+            </select>
+            {formik.touched.userType && formik.errors.userType && (
+              <div className="text-red-500 text-sm">
+                {formik.errors.userType}
+              </div>
+            )}
           </div>
-          <div className="space-y-4 mt-8"></div>
-          <SignInRedirect />
+
+          {/* Submit Button */}
+          <Button className="mt-6" fullWidth type="submit">
+            Register
+          </Button>
         </form>
       </div>
 
-      <div className="w-2/5 max-h-[820px] hidden lg:block">
+      <div className="w-2/5 max-h-[830px] hidden lg:block">
         <img
           src="https://i.imgur.com/zykDNnE.jpeg"
           className="h-full w-full object-cover rounded-3xl"
@@ -96,4 +202,4 @@ export function SignIn() {
   );
 }
 
-export default SignIn;
+export default Register;
