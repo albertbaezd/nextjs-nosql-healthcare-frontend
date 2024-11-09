@@ -1,11 +1,13 @@
 "use client";
 // page.tsx
+import React, { useState } from "react";
 import { SignInRedirect } from "../../components/sign-in-redirect";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Input, Button, Typography } from "@material-tailwind/react";
 import axios from "axios";
 import { useRouter } from "next/navigation"; // Use `next/navigation` in Next.js 13+
+import Modal from "../../components/Modal";
 
 const validationSchema = Yup.object({
   userName: Yup.string().required("User name is required"),
@@ -19,6 +21,13 @@ const validationSchema = Yup.object({
 });
 
 export function Register() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalDescription, setModalDescription] = useState("");
+  const [modalButtonDescription, setModalButtonDescription] = useState("");
+  const [modalCallRegister, setModalCallRegister] = useState<() => void>(
+    () => {}
+  );
+
   const router = useRouter();
 
   const formik = useFormik({
@@ -33,8 +42,7 @@ export function Register() {
       // Your submit logic goes here
       console.log("Form submitted", values);
 
-      try {
-        // Make a POST request to your registration endpoint using Axios
+      const handleModalAction = async () => {
         const response = await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
           {
@@ -45,7 +53,6 @@ export function Register() {
           }
         );
 
-        // Handle the response if the registration is successful
         if (response.status === 201) {
           console.log("Registration successful");
           router.push("/");
@@ -53,6 +60,41 @@ export function Register() {
           console.log(response.status);
           // Handle failure
         }
+      };
+
+      try {
+        if (values.userType == "individual") {
+          handleModalAction();
+        } else if (values.userType == "doctor") {
+          setIsModalOpen(true);
+          setModalDescription(
+            "Your account is detected to be of type doctor. If you agree, this means, that our team will be in touch with you through email to confirm some further information to validate your account."
+          );
+          setModalButtonDescription("Understood, create my account");
+          setModalCallRegister(() => handleModalAction);
+          console.log("Form submitted", values);
+          // add logic to send a button to the modal that will hit the api
+        }
+
+        // Make a POST request to your registration endpoint using Axios
+        // const response = await axios.post(
+        //   `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+        //   {
+        //     name: values.userName,
+        //     email: values.email,
+        //     password: values.password,
+        //     role: values.userType,
+        //   }
+        // );
+
+        // Handle the response if the registration is successful
+        // if (response.status === 201) {
+        //   console.log("Registration successful");
+        //   router.push("/");
+        // } else {
+        //   console.log(response.status);
+        //   // Handle failure
+        // }
       } catch (error) {
         // Handle error (e.g., display error message)
         console.error("An error occurred during registration:", error);
@@ -201,6 +243,16 @@ export function Register() {
           className="h-full w-full object-cover rounded-3xl"
         />
       </div>
+
+      {/* Render the modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Additional steps to create a Doctor's account"
+        description={modalDescription}
+        buttonLabel={modalButtonDescription}
+        onButtonClick={modalCallRegister}
+      />
     </section>
   );
 }
