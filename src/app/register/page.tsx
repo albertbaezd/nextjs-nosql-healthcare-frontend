@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Input, Button, Typography } from "@material-tailwind/react";
 import axios from "axios";
+import { useRouter } from "next/navigation"; // Use `next/navigation` in Next.js 13+
 
 const validationSchema = Yup.object({
   userName: Yup.string().required("User name is required"),
@@ -18,6 +19,8 @@ const validationSchema = Yup.object({
 });
 
 export function Register() {
+  const router = useRouter();
+
   const formik = useFormik({
     initialValues: {
       userName: "",
@@ -43,11 +46,11 @@ export function Register() {
         );
 
         // Handle the response if the registration is successful
-        if (response.status === 200) {
+        if (response.status === 201) {
           console.log("Registration successful");
-          // Handle success (e.g., redirect, store token, etc.)
+          router.push("/");
         } else {
-          console.error(response.status);
+          console.log(response.status);
           // Handle failure
         }
       } catch (error) {
