@@ -18,31 +18,6 @@ const validationSchema = Yup.object({
     .required("Password is required"),
 });
 
-// const handleSubmit = async (values: { email: string; password: string }) => {
-//   try {
-//     // Use the environment variable for the API URL
-//     const response = await axios.post(
-//       `${process.env.NEXT_PUBLIC_API_URL}/auth/login`, // URL from env variable
-//       values // The payload (values) will automatically be sent as JSON
-//     );
-
-//     // Handle success (e.g., redirect, store token, etc.)
-//     console.log("Signed in successfully", response.data);
-//   } catch (error) {
-//     // Handle error
-//     if (axios.isAxiosError(error)) {
-//       // This is an Axios error
-//       console.error(
-//         "An error occurred during sign-in:",
-//         error.response?.data || error.message
-//       );
-//     } else {
-//       // This is not an Axios error (could be something else)
-//       console.error("Unexpected error during sign-in:", error);
-//     }
-//   }
-// };
-
 export function SignIn() {
   const router = useRouter();
 
@@ -61,7 +36,7 @@ export function SignIn() {
           values
         );
 
-        if (response.status === 201) {
+        if (response.status === 200) {
           enqueueSnackbar("Login successful", { variant: "success" });
           router.push("/");
         } else {
@@ -79,85 +54,6 @@ export function SignIn() {
   });
 
   return (
-    // <section className="m-8 flex gap-4">
-    //   <div className="w-2/5 h-full hidden lg:block">
-    //     <img
-    //       src="https://i.imgur.com/U3QktuO.jpeg"
-    //       className="h-full w-full object-cover rounded-3xl"
-    //     />
-    //   </div>
-
-    //   <div className="w-full lg:w-3/5 mt-24">
-    //     <div className="text-center">
-    //       <Typography variant="h2" className="font-bold mb-4">
-    //         Sign In
-    //       </Typography>
-    //       <Typography
-    //         variant="paragraph"
-    //         color="blue-gray"
-    //         className="text-lg font-normal"
-    //       >
-    //         Enter your email and password to Sign In.
-    //       </Typography>
-    //     </div>
-
-    //     <Formik
-    //       initialValues={{ email: "", password: "" }}
-    //       validationSchema={validationSchema}
-    //     >
-    //       {({ setFieldValue }) => (
-    //         <Form className="mt-8 mb-2 mx-auto w-80 max-w-screen-lg lg:w-1/2">
-    //           <div className="mb-1 flex flex-col gap-6">
-    //             <Typography
-    //               variant="small"
-    //               color="blue-gray"
-    //               className="-mb-3 font-medium"
-    //             >
-    //               Your email
-    //             </Typography>
-    //             <Field
-    //               name="email"
-    //               type="email"
-    //               placeholder="name@mail.com"
-    //               className="border border-gray-300 focus:border-gray-500 rounded-md p-2 w-full" // Customize your class as needed
-    //             />
-    //             <ErrorMessage
-    //               name="email"
-    //               component="div"
-    //               className="text-red-500"
-    //             />
-
-    //             <Typography
-    //               variant="small"
-    //               color="blue-gray"
-    //               className="-mb-3 font-medium"
-    //             >
-    //               Password
-    //             </Typography>
-    //             <Field
-    //               name="password"
-    //               type="password"
-    //               placeholder="********"
-    //               className="border border-gray-300 focus:border-gray-500 rounded-md p-2 w-full" // Customize your class as needed
-    //             />
-    //             <ErrorMessage
-    //               name="password"
-    //               component="div"
-    //               className="text-red-500"
-    //             />
-    //           </div>
-
-    //           <Button className="mt-6" fullWidth type="submit">
-    //             Sign In
-    //           </Button>
-
-    //           <div className="space-y-4 mt-8"></div>
-    //           <SignInRedirect />
-    //         </Form>
-    //       )}
-    //     </Formik>
-    //   </div>
-    // </section>
     <section className="m-8 flex gap-4">
       <div className="w-2/5 hidden lg:block">
         <img

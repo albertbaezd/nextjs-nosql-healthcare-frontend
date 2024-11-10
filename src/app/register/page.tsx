@@ -40,9 +40,8 @@ export function Register() {
       password: "",
       userType: "",
     },
-    validationSchema, // Adding Yup validation
+    validationSchema,
     onSubmit: async (values) => {
-      // Your submit logic goes here
       console.log("Form submitted", values);
 
       const handleRegister = async () => {
@@ -119,10 +118,10 @@ export function Register() {
             <Input
               size="lg"
               placeholder="John Doe"
-              name="userName" // Bind the input to Formik's state
-              value={formik.values.userName} // Formik's value
-              onChange={formik.handleChange} // Formik's handleChange
-              onBlur={formik.handleBlur} // Formik's handleBlur
+              name="userName"
+              value={formik.values.userName}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               className={`${
                 formik.touched.userName && formik.errors.userName
                   ? "border-red-500"
@@ -145,10 +144,10 @@ export function Register() {
             <Input
               size="lg"
               placeholder="name@mail.com"
-              name="email" // Bind the input to Formik's state
-              value={formik.values.email} // Formik's value
-              onChange={formik.handleChange} // Formik's handleChange
-              onBlur={formik.handleBlur} // Formik's handleBlur
+              name="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               className={`${
                 formik.touched.email && formik.errors.email
                   ? "border-red-500"
@@ -171,10 +170,10 @@ export function Register() {
               type="password"
               size="lg"
               placeholder="********"
-              name="password" // Bind the input to Formik's state
-              value={formik.values.password} // Formik's value
-              onChange={formik.handleChange} // Formik's handleChange
-              onBlur={formik.handleBlur} // Formik's handleBlur
+              name="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               className={`${
                 formik.touched.password && formik.errors.password
                   ? "border-red-500"
