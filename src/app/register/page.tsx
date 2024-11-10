@@ -1,14 +1,24 @@
 "use client";
-// page.tsx
+
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Input, Button, Typography } from "@material-tailwind/react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 
+import { Input, Button, Typography } from "@material-tailwind/react";
 import Modal from "../../components/Modal";
+import { useUser } from "../context/userContext";
+
+interface userRegisterResponse {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  token: string;
+}
 
 const validationSchema = Yup.object({
   userName: Yup.string().required("User name is required"),
@@ -28,6 +38,7 @@ export function Register() {
   const [modalCallRegister, setModalCallRegister] = useState<() => void>(
     () => {}
   );
+  const { userContext, setUserContext } = useUser();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -46,7 +57,7 @@ export function Register() {
 
       const handleRegister = async () => {
         try {
-          const response = await axios.post(
+          const response = await axios.post<userRegisterResponse>(
             `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
             {
               name: values.userName,
@@ -57,15 +68,25 @@ export function Register() {
           );
 
           if (response.status === 201) {
+            console.log(response.data);
             enqueueSnackbar("Registration successful", { variant: "success" });
             router.push("/");
+
+            // Updating global user context
+            setUserContext({
+              userId: response.data.user.id,
+              userName: response.data.user.name,
+              userEmail: response.data.user.email,
+              userToken: response.data.token,
+            });
           } else {
             enqueueSnackbar(`Registration failed, status: ${response.status}`, {
               variant: "error",
             });
+            console.log("Error found: ", response.data);
           }
         } catch (error) {
-          console.log("Error:", error);
+          console.log("Error catched :", error);
           enqueueSnackbar("An error occurred during registration", {
             variant: "error",
           });

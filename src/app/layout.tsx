@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { Layout } from "@/components";
 import { SnackbarProvider } from "notistack";
+import { UserProvider } from "../app/context/userContext";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -30,9 +31,11 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/favicon.png" type="image/png" />
       </head>
       <body className={roboto.className}>
-        <SnackbarProvider maxSnack={3}>
-          <Layout>{children}</Layout>
-        </SnackbarProvider>
+        <UserProvider>
+          <SnackbarProvider maxSnack={3}>
+            <Layout>{children}</Layout>
+          </SnackbarProvider>
+        </UserProvider>
       </body>
     </html>
   );

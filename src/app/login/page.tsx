@@ -8,6 +8,16 @@ import axios from "axios";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
+import { useUser } from "../context/userContext";
+
+interface userLoginResponse {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  token: string;
+}
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -20,7 +30,7 @@ const validationSchema = Yup.object({
 
 export function SignIn() {
   const router = useRouter();
-
+  const { userContext, setUserContext } = useUser();
   const { enqueueSnackbar } = useSnackbar();
 
   const formik = useFormik({
@@ -31,13 +41,22 @@ export function SignIn() {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post(
+        const response = await axios.post<userLoginResponse>(
           `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
           values
         );
 
         if (response.status === 200) {
+          console.log(response.data);
           enqueueSnackbar("Login successful", { variant: "success" });
+
+          // Updating global user context
+          setUserContext({
+            userId: response.data.user.id,
+            userName: response.data.user.name,
+            userEmail: response.data.user.email,
+            userToken: response.data.token,
+          });
           router.push("/");
         } else {
           enqueueSnackbar(`Login failed, status: ${response.status}`, {
