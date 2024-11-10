@@ -1,19 +1,16 @@
+"use client";
+
 import "./globals.css";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { Layout } from "@/components";
+import { SnackbarProvider } from "notistack";
 
 const roboto = Roboto({
   subsets: ["latin"],
   weight: ["300", "400", "500", "700", "900"],
   display: "swap",
 });
-
-export const metadata: Metadata = {
-  title: "NextJS Tailwind Blog Posts Page",
-  description:
-    "Download Tailwind Blog Post Page, a free webpage template developed by Creative Tim. Based on Tailwind CSS and Material Tailwind, see the live demo on our site and elevate your blogging experience!",
-};
 
 export default function RootLayout({
   children,
@@ -33,7 +30,9 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/favicon.png" type="image/png" />
       </head>
       <body className={roboto.className}>
-        <Layout>{children}</Layout>
+        <SnackbarProvider maxSnack={3}>
+          <Layout>{children}</Layout>
+        </SnackbarProvider>
       </body>
     </html>
   );
