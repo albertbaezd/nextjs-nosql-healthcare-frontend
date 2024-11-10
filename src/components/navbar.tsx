@@ -5,28 +5,44 @@ import {
   Button,
   IconButton,
   Typography,
+  Card,
 } from "@material-tailwind/react";
 import {
   RectangleStackIcon,
-  UserCircleIcon,
-  CommandLineIcon,
+  EnvelopeIcon,
+  InformationCircleIcon,
   XMarkIcon,
   Bars3Icon,
 } from "@heroicons/react/24/solid";
 
+import Image from "next/image";
+import Link from "next/link";
+import logo from "../app/images/serenity-space-png.png";
+
 const NAV_MENU = [
   {
-    name: "Page",
+    name: "Homepage",
     icon: RectangleStackIcon,
   },
   {
-    name: "Account",
-    icon: UserCircleIcon,
+    name: "Articles",
+    icon: Bars3Icon, // Icon for Sections
+    isDropdown: true,
+    dropdownOptions: [
+      { name: "Sleep", href: "/#" },
+      { name: "Anxiety", href: "/#" },
+      { name: "Stress", href: "/#" },
+      { name: "Eating Disorders", href: "/#" },
+      { name: "Cognitive Health", href: "/#" },
+    ],
   },
   {
-    name: "Docs",
-    icon: CommandLineIcon,
-    href: "https://www.material-tailwind.com/docs/react/installation",
+    name: "About us",
+    icon: InformationCircleIcon,
+  },
+  {
+    name: "Contact",
+    icon: EnvelopeIcon,
   },
 ];
 
@@ -67,27 +83,67 @@ export function Navbar() {
   return (
     <MTNavbar shadow={false} fullWidth className="border-0 sticky top-0 z-50">
       <div className="container mx-auto flex items-center justify-between">
-        <Typography
-          as="a"
-          href="https://www.material-tailwind.com"
-          target="_blank"
-          color="blue-gray"
-          className="text-lg font-bold"
-        >
-          Material Tailwind
-        </Typography>
-        <ul className="ml-10 hidden items-center gap-8 lg:flex">
+        <Link href="/" passHref>
+          <div className="flex justify-center items-center">
+            <Image
+              src={logo} // Pass the imported logo here
+              alt="Serenity Space"
+              width={160} // Set the width
+              className="object-contain mt-1" // Ensure the aspect ratio is preserved
+            />
+          </div>
+        </Link>
+
+        {/* Sections */}
+
+        {/* <ul className="ml-10 hidden items-center gap-8 lg:flex">
           {NAV_MENU.map(({ name, icon: Icon, href }) => (
             <NavItem key={name} href={href}>
               <Icon className="h-5 w-5" />
               {name}
             </NavItem>
           ))}
+        </ul> */}
+
+        <ul className="ml-10 hidden items-center gap-8 lg:flex">
+          {NAV_MENU.map(
+            ({ name, icon: Icon, href, isDropdown, dropdownOptions }) => (
+              <li className="relative group" key={name}>
+                {isDropdown ? (
+                  <>
+                    <div className="relative group">
+                      <div className="flex items-center space-x-2 cursor-pointer text-black">
+                        <Icon className="h-5 w-5" />
+                        <span>{name}</span>
+                      </div>
+
+                      {/* Dropdown menu */}
+                      <div className="absolute left-0 hidden mt-2 w-40 bg-white rounded-md shadow-lg group-hover:flex flex-col top-[10px] pt-2.5 px-2.5">
+                        <ul className="py-1">
+                          {dropdownOptions.map((option) => (
+                            <NavItem key={option.name} href={option.href}>
+                              <span className="pt-2.5 ">{option.name}</span>
+                            </NavItem>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <NavItem key={name} href={href}>
+                    <Icon className="h-5 w-5" />
+                    {name}
+                  </NavItem>
+                )}
+              </li>
+            )
+          )}
         </ul>
+
+        {/* Profile */}
         <div className="hidden items-center gap-2 lg:flex">
-          <Button variant="text">Sign In</Button>
           <a href="https://www.material-tailwind.com/blocks" target="_blank">
-            <Button color="gray">blocks</Button>
+            <Button color="gray">Profile</Button>
           </a>
         </div>
         <IconButton
@@ -114,9 +170,8 @@ export function Navbar() {
             ))}
           </ul>
           <div className="mt-6 mb-4 flex items-center gap-2">
-            <Button variant="text">Sign In</Button>
             <a href="https://www.material-tailwind.com/blocks" target="_blank">
-              <Button color="gray">blocks</Button>
+              <Button color="gray">Profile</Button>
             </a>
           </div>
         </div>
