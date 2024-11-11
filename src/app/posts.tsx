@@ -119,10 +119,10 @@ export function Posts() {
     const fetchPostsWithAuthors = async () => {
       try {
         // Fetch all posts from the new URL
-        const postsResponse = await axios.get<PostBackend[]>(
-          `${process.env.NEXT_PUBLIC_API_URL}/posts`
+        const postsResponse = await axios.get<PostBackend>(
+          `${process.env.NEXT_PUBLIC_API_URL}/posts?limit=6`
         );
-        const posts = postsResponse.data;
+        const posts = postsResponse.data.posts;
 
         // Fetch the authors for each post
         const mappedPosts = await Promise.all(

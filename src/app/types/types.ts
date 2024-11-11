@@ -22,17 +22,25 @@ export interface Post {
 }
 
 export interface PostBackend {
-  image: string;
-  area: string;
-  title: string;
-  description: string;
-  author?: {
-    name: string;
-    id: string;
-    profilePicture?: string;
-  };
-  authorId: string;
-  createdAt: string;
+  page: number;
+  limitOrTotal: number;
+  totalPages: number;
+  totalPosts: number;
+  posts: [
+    {
+      image: string;
+      area: string;
+      title: string;
+      description: string;
+      author?: {
+        name: string;
+        id: string;
+        profilePicture?: string;
+      };
+      authorId: string;
+      createdAt: string;
+    }
+  ];
 }
 
 export interface Author {
