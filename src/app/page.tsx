@@ -5,7 +5,7 @@ import { Navbar, Footer } from "@/components";
 import React, { useEffect } from "react";
 import Hero from "./hero";
 import Posts from "./posts";
-import Articles from "./articles";
+import Videos from "./videos";
 import { useUser } from "../app/context/userContext";
 
 export default function Campaign() {
@@ -21,7 +21,7 @@ export default function Campaign() {
       <Navbar />
       <Hero />
       <Posts />
-      <Articles />
+      <Videos />
       <Footer />
     </>
   );

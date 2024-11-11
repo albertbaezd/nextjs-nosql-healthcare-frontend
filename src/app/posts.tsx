@@ -193,7 +193,7 @@ export function Posts() {
       >
         Loading posts...
       </Typography>
-    ); // You can customize the loading state
+    );
   }
 
   return (

@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 
 import { Input, Button, Typography } from "@material-tailwind/react";
-import Modal from "../../components/Modal";
+import Modal from "../../components/modal";
 import { useUser } from "../context/userContext";
 
 interface userRegisterResponse {

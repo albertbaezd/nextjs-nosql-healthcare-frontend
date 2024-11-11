@@ -48,3 +48,36 @@ export interface Author {
   name: string;
   profilePicture?: string;
 }
+
+export interface Video {
+  id: string;
+  area: string;
+  title: string;
+  description: string;
+  videoId: string;
+  thumbnail: string;
+  createdAt: string;
+}
+
+export interface VideoBackend {
+  page: number;
+  limitOrTotal: number;
+  totalPages: number;
+  totalVideos: number;
+  videos: [
+    {
+      _id: string;
+      area: {
+        name: string;
+        description: string;
+      };
+      title: string;
+      description: string;
+      body: string;
+      videoId: string;
+      thumbnail: string;
+      createdAt: string;
+      comments: string[];
+    }
+  ];
+}
