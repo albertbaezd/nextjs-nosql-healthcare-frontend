@@ -40,7 +40,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row items-center !justify-between">
           <Typography
             as="a"
-            href="https://www.material-tailwind.com"
+            href="https://github.com/albertbaezd/nosql-healthcare-project-backend"
             target="_blank"
             variant="h6"
             className="text-gray-900"
