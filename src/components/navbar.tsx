@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Navbar as MTNavbar,
   Collapse,
@@ -15,9 +15,12 @@ import {
   Bars3Icon,
 } from "@heroicons/react/24/solid";
 
+import { useRouter } from "next/navigation"; // Use `next/navigation` in Next.js 13+
+
 import Image from "next/image";
 import Link from "next/link";
 import logo from "../app/images/serenity-space-png.png";
+import { useUser } from "@/app/context/userContext";
 
 const NAV_MENU = [
   {
@@ -70,6 +73,12 @@ function NavItem({ children, href }: NavItemProps) {
 
 export function Navbar() {
   const [open, setOpen] = React.useState(false);
+  const router = useRouter();
+  const { userContext, setUserContext } = useUser();
+
+  const handleGoToAccountClick = () => {
+    router.push(`/profile/${userContext.userId}`); // Navigate to the "create account" page
+  };
 
   const handleOpen = () => setOpen((cur) => !cur);
 
@@ -78,7 +87,11 @@ export function Navbar() {
       "resize",
       () => window.innerWidth >= 960 && setOpen(false)
     );
-  }, []);
+
+    if (!router) {
+      console.error("Router not initialized");
+    }
+  }, [router]);
 
   return (
     <MTNavbar shadow={false} fullWidth className="border-0 sticky top-0 z-50">
@@ -133,8 +146,10 @@ export function Navbar() {
 
         {/* Profile */}
         <div className="hidden items-center gap-2 lg:flex">
-          <a href="https://www.material-tailwind.com/blocks" target="_blank">
-            <Button color="gray">Profile</Button>
+          <a target="_blank">
+            <Button color="gray" onClick={handleGoToAccountClick}>
+              Profile
+            </Button>
           </a>
         </div>
         <IconButton
@@ -161,8 +176,10 @@ export function Navbar() {
             ))}
           </ul>
           <div className="mt-6 mb-4 flex items-center gap-2">
-            <a href="https://www.material-tailwind.com/blocks" target="_blank">
-              <Button color="gray">Profile</Button>
+            <a target="_blank">
+              <Button color="gray" onClick={handleGoToAccountClick}>
+                Profile
+              </Button>
             </a>
           </div>
         </div>

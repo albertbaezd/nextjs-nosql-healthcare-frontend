@@ -14,7 +14,7 @@ export default function Campaign() {
   useEffect(() => {
     // This will run only once after the first render
     console.log("Current user context:", userContext);
-  }, []); // Empty dependency array ensures it runs only once
+  }, []);
 
   return (
     <>

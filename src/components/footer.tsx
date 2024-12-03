@@ -1,42 +1,19 @@
-import {
-  Typography,
-  IconButton,
-  Input,
-  Button,
-} from "@material-tailwind/react";
+import { Typography, IconButton } from "@material-tailwind/react";
 
-import { CommandLineIcon } from "@heroicons/react/24/solid";
+import SubscriptionCard from "./subscription-card";
 
 const CURRENT_YEAR = new Date().getFullYear();
 
-export function Footer() {
+type FooterProps = {
+  omitSubscription?: boolean; // Optional prop
+};
+
+export function Footer({ omitSubscription = false }: FooterProps) {
   return (
     <footer className="pb-5 p-10 md:pt-10">
       <div className="container flex flex-col mx-auto">
-        <div className="flex !w-full py-10 mb-5 md:mb-20 flex-col justify-center !items-center bg-gray-900 container max-w-6xl mx-auto rounded-2xl p-5 ">
-          <Typography
-            className="text-2xl md:text-3xl text-center font-bold "
-            color="white"
-          >
-            Join our community!
-          </Typography>
-          <Typography
-            color="white"
-            className=" md:w-7/12 text-center my-3 !text-base"
-          >
-            Get news in your inbox every week! We hate spam too, so no worries
-            about this.
-          </Typography>
-          <div className="mt-8 flex flex-col items-center justify-center gap-4 md:flex-row">
-            <div className="w-80">
-              {/* @ts-ignore */}
-              <Input label="Email" color="white" />
-            </div>
-            <Button size="md" className="lg:w-32" fullWidth color="white">
-              subscribe
-            </Button>
-          </div>
-        </div>
+        {!omitSubscription && <SubscriptionCard />}
+
         <div className="flex flex-col md:flex-row items-center !justify-between">
           <Typography
             as="a"
