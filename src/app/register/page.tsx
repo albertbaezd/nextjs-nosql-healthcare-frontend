@@ -29,6 +29,12 @@ const validationSchema = Yup.object({
     .min(8, "Password must be at least 8 characters")
     .required("Password is required"),
   userType: Yup.string().required("User type is required"),
+  city: Yup.string().optional(),
+  state: Yup.string().optional(),
+  country: Yup.string().optional(),
+  description: Yup.string().optional(),
+  university: Yup.string().optional(),
+  speciality: Yup.string().optional(),
 });
 
 export function Register() {
@@ -50,6 +56,12 @@ export function Register() {
       email: "",
       password: "",
       userType: "",
+      city: "",
+      state: "",
+      country: "",
+      description: "",
+      university: "",
+      speciality: "",
     },
     validationSchema,
     onSubmit: async (values) => {
@@ -64,6 +76,12 @@ export function Register() {
               email: values.email,
               password: values.password,
               role: values.userType,
+              city: values.city,
+              state: values.state,
+              country: values.country,
+              description: values.description,
+              university: values.university,
+              speciality: values.speciality,
             }
           );
 
@@ -127,7 +145,7 @@ export function Register() {
           className="mt-8 mb-2 mx-auto w-80 max-w-screen-lg lg:w-1/2"
           onSubmit={formik.handleSubmit}
         >
-          {/* Email Input */}
+          {/* Name Input */}
           <div className="mb-1 flex flex-col gap-6">
             <Typography
               variant="small"
@@ -234,6 +252,115 @@ export function Register() {
                 {formik.errors.userType}
               </div>
             )}
+
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="-mb-3 font-medium"
+            >
+              City
+            </Typography>
+            <Input
+              size="lg"
+              placeholder="Optional (San Diego)"
+              name="city"
+              value={formik.values.city}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={"border-gray-300"}
+            />
+
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="-mb-3 font-medium"
+            >
+              State
+            </Typography>
+            <Input
+              size="lg"
+              placeholder="Optional (California)"
+              name="state"
+              value={formik.values.state}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={"border-gray-300"}
+            />
+
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="-mb-3 font-medium"
+            >
+              Country
+            </Typography>
+            <Input
+              size="lg"
+              placeholder="Optional (United States)"
+              name="country"
+              value={formik.values.country}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={"border-gray-300"}
+            />
+
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="-mb-3 font-medium"
+            >
+              University
+            </Typography>
+
+            <Input
+              size="lg"
+              placeholder="Optional (Fordham University)"
+              name="university"
+              value={formik.values.university}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={"border-gray-300"}
+            />
+
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="-mb-3 font-medium"
+            >
+              Description
+            </Typography>
+
+            <Input
+              size="lg"
+              placeholder="Optional (...)"
+              name="description"
+              value={formik.values.description}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={"border-gray-300"}
+            />
+
+            {formik.values.userType === "doctor" && (
+              <>
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="-mb-3 font-medium"
+                >
+                  Speciality
+                </Typography>
+
+                <Input
+                  size="lg"
+                  placeholder="Optional (Therapist)"
+                  name="speciality"
+                  value={formik.values.speciality}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={"border-gray-300"}
+                />
+              </>
+            )}
           </div>
 
           {/* Submit Button */}
@@ -243,7 +370,7 @@ export function Register() {
         </form>
       </div>
 
-      <div className="w-2/5 max-h-[830px] hidden lg:block">
+      <div className="w-2/5 max-h-[1300px] hidden lg:block">
         <img
           src="https://i.imgur.com/zykDNnE.jpeg"
           className="h-full w-full object-cover rounded-3xl"

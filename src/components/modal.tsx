@@ -47,7 +47,7 @@ const Modal: React.FC<ModalProps> = ({
             <p>{description}</p>
             <button
               onClick={onButtonClick} // API call action
-              className="mt-6 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+              className="mt-6 mr-6 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
             >
               {buttonLabel}
             </button>
