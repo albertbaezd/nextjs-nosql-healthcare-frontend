@@ -5,6 +5,7 @@ import {
   GlobeAltIcon,
   BuildingLibraryIcon,
   BookOpenIcon,
+  CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -193,6 +194,19 @@ export function Profile() {
                     >
                       {userData?.email}
                     </Typography>
+
+                    {userData.role == "doctor" && (
+                      <div className="flex items-center gap-2">
+                        <CheckCircleIcon className="-mt-px h-5 w-5 text-blue-500" />
+                        <Typography
+                          variant="paragraph"
+                          color="gray"
+                          className="!mt-0 font-normal"
+                        >
+                          Verified professional
+                        </Typography>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -241,13 +255,6 @@ export function Profile() {
                       </Typography>
                     )}
                   </div>
-
-                  {/* <Typography className="font-medium text-blue-gray-500">
-                    {userData.city ? `${userData.city}` : "City not specified"}{" "}
-                    {userData.state
-                      ? `${userData.state}`
-                      : "State not specified"}
-                  </Typography> */}
                 </div>
                 <div className="flex items-center gap-2">
                   <GlobeAltIcon className="-mt-px h-4 w-4 text-blue-gray-500" />
@@ -318,7 +325,7 @@ export function Profile() {
                 </div>
               </div>
               <div className="mb-10 py-6">
-                <div className="flex w-full flex-col items-start lg:w-1/2">
+                <div className="flex w-full flex-col items-start">
                   <Typography className="mb-2 font-normal text-black-800">
                     Description
                   </Typography>
@@ -333,7 +340,7 @@ export function Profile() {
                       className={`${
                         formik.touched.description && formik.errors.description
                           ? "border-red-500"
-                          : "border-2 border-black"
+                          : "border-2 border-gray-300"
                       } w-full p-3 rounded-lg text-gray-700`}
                       rows={4} // Optional: You can adjust the number of rows
                     />
@@ -349,7 +356,7 @@ export function Profile() {
               {/* Action Buttons */}
               <div className="mt-4 flex gap-4">
                 {!isEditing && (
-                  <Button onClick={() => setIsEditing(true)}>Edit2</Button>
+                  <Button onClick={() => setIsEditing(true)}>Edit</Button>
                 )}
                 {isEditing && (
                   <>
