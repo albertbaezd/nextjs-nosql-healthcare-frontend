@@ -12,6 +12,8 @@ import axios from "axios";
 import { useRouter, useParams } from "next/navigation";
 import { Navbar, Footer } from "@/components";
 
+import { TailSpin } from "react-loader-spinner";
+
 interface User {
   id: string;
   name: string;
@@ -58,8 +60,23 @@ export function Profile() {
     }
   }, [id]);
 
+  // Redirect to /home if no user is found
+  useEffect(() => {
+    if (!loading && !userData) {
+      const timer = setTimeout(() => {
+        router.push("/home");
+      }, 5000);
+
+      return () => clearTimeout(timer); // Clean up the timer
+    }
+  }, [loading, userData, router]);
+
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <TailSpin height="80" width="80" color="gray" ariaLabel="loading" />
+      </div>
+    );
   }
 
   if (error) {
@@ -67,11 +84,21 @@ export function Profile() {
   }
 
   if (!userData) {
-    return <p>No user found.</p>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <Typography variant="h5" color="blue-gray">
+          No user found.
+        </Typography>
+        <Typography color="gray" className="mt-6">
+          Redirecting to home in 5 seconds...
+        </Typography>
+      </div>
+    );
   }
 
   return (
     <>
+      <Navbar />
       <section className="relative block h-[50vh]">
         <div className="bg-profile-background absolute top-0 h-full w-full bg-[url('https://i.imgur.com/RTE9LP3.jpeg')] bg-cover bg-center scale-105" />
         <div className="absolute top-0 h-full w-full bg-black/60 bg-cover bg-center" />
@@ -138,6 +165,10 @@ export function Profile() {
             </div>
             <div className="mb-10 py-6">
               <div className="flex w-full flex-col items-start lg:w-1/2">
+                <Typography className="mb-2 font-normal text-black-800">
+                  Description
+                </Typography>
+
                 <Typography className="mb-6 font-normal text-blue-gray-500">
                   {userData.description}
                 </Typography>
