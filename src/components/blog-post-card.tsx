@@ -16,6 +16,7 @@ export function BlogPostCard({
   description,
   authorName,
   createdAt,
+  commentCount,
 }: BlogPostCardProps) {
   return (
     <Card
@@ -71,6 +72,15 @@ export function BlogPostCard({
             >
               {createdAt}
             </Typography>
+            {commentCount > 0 && (
+              <Typography
+                variant="small"
+                color="blue-gray"
+                className="mb-0.5 !font-medium"
+              >
+                {commentCount} comments
+              </Typography>
+            )}
           </div>
         </div>
       </CardBody>

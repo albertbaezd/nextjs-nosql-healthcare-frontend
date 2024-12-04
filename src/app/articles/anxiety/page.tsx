@@ -29,6 +29,12 @@ export default function Campaign() {
         title="Latest posts on Anxiety"
         description="This page offers practical strategies, including mindfulness, breathing exercises, and lifestyle changes, to help you regain control. You'll also find links to trusted resources and expert advice on coping with anxiety, empowering you to take proactive steps toward better mental health."
       />
+      <AreaPosts
+        areaId="673139057ce2f8d342e4ab4b"
+        title="Most popular posts on Anxiety"
+        description="Take a look at what our users are saying about the most popular posts on Anxiety topics!"
+        mostPopular
+      />
       <AreaVideos
         areaId="673139057ce2f8d342e4ab4b"
         title="Latest videos on Anxiety"

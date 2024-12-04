@@ -16,10 +16,16 @@ interface AreaPostsProps {
   areaId: string; // or number, depending on your use case
   title: string;
   description: string;
+  mostPopular?: boolean;
 }
 
 // Functional component that accepts the props
-export function AreaPosts({ areaId, title, description }: AreaPostsProps) {
+export function AreaPosts({
+  areaId,
+  title,
+  description,
+  mostPopular,
+}: AreaPostsProps) {
   const [posts, setPosts] = useState<Post[]>([]); // State to store the posts
   const [loading, setLoading] = useState<boolean>(true); // State for loading status
   const [page, setPage] = useState<number>(1); // Track the current page for pagination
@@ -29,9 +35,15 @@ export function AreaPosts({ areaId, title, description }: AreaPostsProps) {
     const fetchPostsWithAuthors = async () => {
       try {
         // Fetch all posts from the new URL
-        const postsResponse = await axios.get<PostBackend>(
-          `${process.env.NEXT_PUBLIC_API_URL}/posts/area/${areaId}?limit=6&page=${page}`
-        );
+        // const postsResponse = await axios.get<PostBackend>(
+        //   `${process.env.NEXT_PUBLIC_API_URL}/posts/area/${areaId}?limit=6&page=${page}`
+        // );
+
+        const url = mostPopular
+          ? `${process.env.NEXT_PUBLIC_API_URL}/posts/area/${areaId}/mostpopular?limit=6&page=${page}`
+          : `${process.env.NEXT_PUBLIC_API_URL}/posts/area/${areaId}?limit=6&page=${page}`;
+
+        const postsResponse = await axios.get<PostBackend>(url);
         const posts: any[] = postsResponse.data.posts;
 
         // If no posts were returned, stop further requests
@@ -61,6 +73,7 @@ export function AreaPosts({ areaId, title, description }: AreaPostsProps) {
                   profilePicture: author.profilePicture || "",
                 },
                 createdAt: formatDate(post.createdAt),
+                commentCount: post.commentCount || 0,
               };
             } catch (error) {
               console.error(
@@ -78,6 +91,7 @@ export function AreaPosts({ areaId, title, description }: AreaPostsProps) {
                   profilePicture: "",
                 },
                 createdAt: post.createdAt,
+                commentCount: post.commentCount || 0,
               };
             }
           })
@@ -122,7 +136,16 @@ export function AreaPosts({ areaId, title, description }: AreaPostsProps) {
       ) : (
         <div className="container my-auto grid grid-cols-1 gap-x-8 gap-y-16 items-start lg:grid-cols-3">
           {posts.map(
-            ({ id, image, area, title, description, author, createdAt }) => (
+            ({
+              id,
+              image,
+              area,
+              title,
+              description,
+              author,
+              createdAt,
+              commentCount,
+            }) => (
               <BlogPostCard
                 key={id}
                 image={image}
@@ -131,6 +154,7 @@ export function AreaPosts({ areaId, title, description }: AreaPostsProps) {
                 description={description}
                 createdAt={createdAt}
                 authorName={author.name}
+                commentCount={commentCount}
               />
             )
           )}
