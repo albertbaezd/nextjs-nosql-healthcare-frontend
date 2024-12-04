@@ -18,7 +18,10 @@ export function BlogPostCard({
   createdAt,
 }: BlogPostCardProps) {
   return (
-    <Card shadow={true}>
+    <Card
+      shadow={true}
+      className="transition-transform transform hover:scale-105 hover:shadow-lg cursor-pointer"
+    >
       <CardHeader>
         <Image
           width={768}

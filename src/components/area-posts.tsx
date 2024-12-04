@@ -32,10 +32,11 @@ export function AreaPosts({ areaId, title, description }: AreaPostsProps) {
         const postsResponse = await axios.get<PostBackend>(
           `${process.env.NEXT_PUBLIC_API_URL}/posts/area/${areaId}?limit=6&page=${page}`
         );
-        const posts = postsResponse.data.posts;
+        const posts: any[] = postsResponse.data.posts;
 
         // If no posts were returned, stop further requests
-        if (!posts.length) {
+        console.log("posts", postsResponse);
+        if (posts.length === 0) {
           setHasMore(false);
         }
 
@@ -87,6 +88,7 @@ export function AreaPosts({ areaId, title, description }: AreaPostsProps) {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching posts:", error);
+        setHasMore(false); // no more posts to load, then the show more is not shown
         setLoading(false); // Set loading to false even if there's an error
       }
     };

@@ -5,7 +5,7 @@ import { Navbar, Footer } from "@/components";
 import React, { useEffect } from "react";
 import Hero from "../../hero";
 import AreaPosts from "../../../components/area-posts";
-import Videos from "../..//videos";
+import AreaVideos from "../../../components/area-videos";
 import { useUser } from "../../context/userContext";
 
 export default function Campaign() {
@@ -29,7 +29,12 @@ export default function Campaign() {
         title="Latest posts on Anxiety"
         description="This page offers practical strategies, including mindfulness, breathing exercises, and lifestyle changes, to help you regain control. You'll also find links to trusted resources and expert advice on coping with anxiety, empowering you to take proactive steps toward better mental health."
       />
-      <Videos />
+      <AreaVideos
+        areaId="673139057ce2f8d342e4ab4b"
+        title="Latest videos on Anxiety"
+        description="Take a breath. These videos are here to guide you through anxiety with expert tips, calming techniques, and insights to help you find your calm."
+        bannerUrl="https://i.imgur.com/pBhbBYY.jpeg"
+      />
       <Footer />
     </>
   );
