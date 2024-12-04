@@ -9,6 +9,7 @@ import axios from "axios";
 
 import { Post, PostBackend, Author } from "./types/types";
 import { formatDate } from "./constants/constants";
+import { TailSpin } from "react-loader-spinner";
 
 // const fetchPostsWithAuthors = async () => {
 //   try {
@@ -186,13 +187,9 @@ export function Posts() {
 
   if (loading) {
     return (
-      <Typography
-        variant="lead"
-        color="gray"
-        className="max-w-3xl mb-36 text-center text-gray-500"
-      >
-        Loading posts...
-      </Typography>
+      <div className="flex justify-center items-center min-h-screen">
+        <TailSpin height="80" width="80" color="gray" ariaLabel="loading" />
+      </div>
     );
   }
 
@@ -223,21 +220,28 @@ export function Posts() {
       >
         Dive into what our specialists have to say about your favorite topics.
       </Typography>
-      <div className="container my-auto grid grid-cols-1 gap-x-8 gap-y-16 items-start lg:grid-cols-3">
-        {posts.map(
-          ({ id, image, area, title, description, author, createdAt }) => (
-            <BlogPostCard
-              key={id}
-              image={image}
-              area={area}
-              title={title}
-              description={description}
-              createdAt={createdAt}
-              authorName={author.name}
-            />
-          )
-        )}
-      </div>
+
+      {loading ? (
+        <div className="flex justify-center items-center min-h-screen">
+          <TailSpin height="80" width="80" color="gray" ariaLabel="loading" />
+        </div>
+      ) : (
+        <div className="container my-auto grid grid-cols-1 gap-x-8 gap-y-16 items-start lg:grid-cols-3">
+          {posts.map(
+            ({ id, image, area, title, description, author, createdAt }) => (
+              <BlogPostCard
+                key={id}
+                image={image}
+                area={area}
+                title={title}
+                description={description}
+                createdAt={createdAt}
+                authorName={author.name}
+              />
+            )
+          )}
+        </div>
+      )}
     </section>
   );
 }
