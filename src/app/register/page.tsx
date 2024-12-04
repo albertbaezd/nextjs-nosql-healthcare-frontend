@@ -1,11 +1,24 @@
 "use client";
-// page.tsx
-import { SignInRedirect } from "../../components/sign-in-redirect";
+
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Input, Button, Typography } from "@material-tailwind/react";
 import axios from "axios";
-import { useRouter } from "next/navigation"; // Use `next/navigation` in Next.js 13+
+import { useRouter } from "next/navigation";
+import { useSnackbar } from "notistack";
+
+import { Input, Button, Typography } from "@material-tailwind/react";
+import Modal from "../../components/modal";
+import { useUser } from "../context/userContext";
+
+interface userRegisterResponse {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  token: string;
+}
 
 const validationSchema = Yup.object({
   userName: Yup.string().required("User name is required"),
@@ -16,9 +29,25 @@ const validationSchema = Yup.object({
     .min(8, "Password must be at least 8 characters")
     .required("Password is required"),
   userType: Yup.string().required("User type is required"),
+  city: Yup.string().optional(),
+  state: Yup.string().optional(),
+  country: Yup.string().optional(),
+  description: Yup.string().optional(),
+  university: Yup.string().optional(),
+  speciality: Yup.string().optional(),
 });
 
 export function Register() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalDescription, setModalDescription] = useState("");
+  const [modalButtonDescription, setModalButtonDescription] = useState("");
+  const [modalCallRegister, setModalCallRegister] = useState<() => void>(
+    () => {}
+  );
+  const { userContext, setUserContext } = useUser();
+
+  const { enqueueSnackbar } = useSnackbar();
+
   const router = useRouter();
 
   const formik = useFormik({
@@ -27,35 +56,71 @@ export function Register() {
       email: "",
       password: "",
       userType: "",
+      city: "",
+      state: "",
+      country: "",
+      description: "",
+      university: "",
+      speciality: "",
     },
-    validationSchema, // Adding Yup validation
+    validationSchema,
     onSubmit: async (values) => {
-      // Your submit logic goes here
       console.log("Form submitted", values);
 
-      try {
-        // Make a POST request to your registration endpoint using Axios
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
-          {
-            name: values.userName,
-            email: values.email,
-            password: values.password,
-            role: values.userType,
-          }
-        );
+      const handleRegister = async () => {
+        try {
+          const response = await axios.post<userRegisterResponse>(
+            `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+            {
+              name: values.userName,
+              email: values.email,
+              password: values.password,
+              role: values.userType,
+              city: values.city,
+              state: values.state,
+              country: values.country,
+              description: values.description,
+              university: values.university,
+              speciality: values.speciality,
+            }
+          );
 
-        // Handle the response if the registration is successful
-        if (response.status === 201) {
-          console.log("Registration successful");
-          router.push("/");
-        } else {
-          console.log(response.status);
-          // Handle failure
+          if (response.status === 201) {
+            console.log(response.data);
+            enqueueSnackbar("Registration successful", { variant: "success" });
+            router.push("/");
+
+            // Updating global user context
+            setUserContext({
+              userId: response.data.user.id,
+              userName: response.data.user.name,
+              userEmail: response.data.user.email,
+              userToken: response.data.token,
+            });
+          } else {
+            enqueueSnackbar(`Registration failed, status: ${response.status}`, {
+              variant: "error",
+            });
+            console.log("Error found: ", response.data);
+          }
+        } catch (error) {
+          console.log("Error catched :", error);
+          enqueueSnackbar("An error occurred during registration", {
+            variant: "error",
+          });
         }
-      } catch (error) {
-        // Handle error (e.g., display error message)
-        console.error("An error occurred during registration:", error);
+      };
+
+      if (values.userType == "individual") {
+        handleRegister();
+      } else if (values.userType == "doctor") {
+        setIsModalOpen(true);
+        setModalDescription(
+          "Your account is detected to be of type doctor. If you agree, this means, that our team will be in touch with you through email to confirm some further information to validate your account."
+        );
+        setModalButtonDescription("Understood, create my account");
+        setModalCallRegister(() => handleRegister);
+        console.log("Form submitted", values);
       }
     },
   });
@@ -67,6 +132,7 @@ export function Register() {
           <Typography variant="h2" className="font-bold mb-4">
             Register
           </Typography>
+
           <Typography
             variant="paragraph"
             color="blue-gray"
@@ -79,7 +145,7 @@ export function Register() {
           className="mt-8 mb-2 mx-auto w-80 max-w-screen-lg lg:w-1/2"
           onSubmit={formik.handleSubmit}
         >
-          {/* Email Input */}
+          {/* Name Input */}
           <div className="mb-1 flex flex-col gap-6">
             <Typography
               variant="small"
@@ -91,10 +157,10 @@ export function Register() {
             <Input
               size="lg"
               placeholder="John Doe"
-              name="userName" // Bind the input to Formik's state
-              value={formik.values.userName} // Formik's value
-              onChange={formik.handleChange} // Formik's handleChange
-              onBlur={formik.handleBlur} // Formik's handleBlur
+              name="userName"
+              value={formik.values.userName}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               className={`${
                 formik.touched.userName && formik.errors.userName
                   ? "border-red-500"
@@ -117,10 +183,10 @@ export function Register() {
             <Input
               size="lg"
               placeholder="name@mail.com"
-              name="email" // Bind the input to Formik's state
-              value={formik.values.email} // Formik's value
-              onChange={formik.handleChange} // Formik's handleChange
-              onBlur={formik.handleBlur} // Formik's handleBlur
+              name="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               className={`${
                 formik.touched.email && formik.errors.email
                   ? "border-red-500"
@@ -143,10 +209,10 @@ export function Register() {
               type="password"
               size="lg"
               placeholder="********"
-              name="password" // Bind the input to Formik's state
-              value={formik.values.password} // Formik's value
-              onChange={formik.handleChange} // Formik's handleChange
-              onBlur={formik.handleBlur} // Formik's handleBlur
+              name="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               className={`${
                 formik.touched.password && formik.errors.password
                   ? "border-red-500"
@@ -186,6 +252,115 @@ export function Register() {
                 {formik.errors.userType}
               </div>
             )}
+
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="-mb-3 font-medium"
+            >
+              City
+            </Typography>
+            <Input
+              size="lg"
+              placeholder="Optional (San Diego)"
+              name="city"
+              value={formik.values.city}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={"border-gray-300"}
+            />
+
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="-mb-3 font-medium"
+            >
+              State
+            </Typography>
+            <Input
+              size="lg"
+              placeholder="Optional (California)"
+              name="state"
+              value={formik.values.state}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={"border-gray-300"}
+            />
+
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="-mb-3 font-medium"
+            >
+              Country
+            </Typography>
+            <Input
+              size="lg"
+              placeholder="Optional (United States)"
+              name="country"
+              value={formik.values.country}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={"border-gray-300"}
+            />
+
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="-mb-3 font-medium"
+            >
+              University
+            </Typography>
+
+            <Input
+              size="lg"
+              placeholder="Optional (Fordham University)"
+              name="university"
+              value={formik.values.university}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={"border-gray-300"}
+            />
+
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="-mb-3 font-medium"
+            >
+              Description
+            </Typography>
+
+            <Input
+              size="lg"
+              placeholder="Optional (...)"
+              name="description"
+              value={formik.values.description}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={"border-gray-300"}
+            />
+
+            {formik.values.userType === "doctor" && (
+              <>
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="-mb-3 font-medium"
+                >
+                  Speciality
+                </Typography>
+
+                <Input
+                  size="lg"
+                  placeholder="Optional (Therapist)"
+                  name="speciality"
+                  value={formik.values.speciality}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={"border-gray-300"}
+                />
+              </>
+            )}
           </div>
 
           {/* Submit Button */}
@@ -195,12 +370,22 @@ export function Register() {
         </form>
       </div>
 
-      <div className="w-2/5 max-h-[830px] hidden lg:block">
+      <div className="w-2/5 max-h-[1300px] hidden lg:block">
         <img
           src="https://i.imgur.com/zykDNnE.jpeg"
           className="h-full w-full object-cover rounded-3xl"
         />
       </div>
+
+      {/* Render the modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Additional steps to create a Doctor's account"
+        description={modalDescription}
+        buttonLabel={modalButtonDescription}
+        onButtonClick={modalCallRegister}
+      />
     </section>
   );
 }

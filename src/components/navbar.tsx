@@ -1,32 +1,54 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Navbar as MTNavbar,
   Collapse,
   Button,
   IconButton,
   Typography,
+  Card,
 } from "@material-tailwind/react";
 import {
   RectangleStackIcon,
-  UserCircleIcon,
-  CommandLineIcon,
+  EnvelopeIcon,
+  InformationCircleIcon,
   XMarkIcon,
   Bars3Icon,
 } from "@heroicons/react/24/solid";
 
+import { useRouter } from "next/navigation"; // Use `next/navigation` in Next.js 13+
+
+import Image from "next/image";
+import Link from "next/link";
+import logo from "../app/images/serenity-space-png.png";
+import { useUser } from "@/app/context/userContext";
+
 const NAV_MENU = [
   {
-    name: "Page",
+    name: "Homepage",
     icon: RectangleStackIcon,
+    route: "/",
   },
   {
-    name: "Account",
-    icon: UserCircleIcon,
+    name: "Articles",
+    icon: Bars3Icon, // Icon for Sections
+    isDropdown: true,
+    dropdownOptions: [
+      { name: "Sleep", route: "/articles/sleep" },
+      { name: "Anxiety", route: "/articles/anxiety" },
+      { name: "Stress", route: "/articles/stress" },
+      { name: "Eating Disorders", route: "/articles/eating-disorders" },
+      { name: "Cognitive Health", route: "/articles/cognitive-health" },
+    ],
   },
   {
-    name: "Docs",
-    icon: CommandLineIcon,
-    href: "https://www.material-tailwind.com/docs/react/installation",
+    name: "About us",
+    icon: InformationCircleIcon,
+    route: "/about",
+  },
+  {
+    name: "Contact",
+    icon: EnvelopeIcon,
+    route: "/contact",
   },
 ];
 
@@ -54,6 +76,16 @@ function NavItem({ children, href }: NavItemProps) {
 
 export function Navbar() {
   const [open, setOpen] = React.useState(false);
+  const router = useRouter();
+  const { userContext, setUserContext } = useUser();
+
+  const handleGoToAccountClick = () => {
+    router.push(`/profile/${userContext.userId}`); // Navigate to the "create account" page
+  };
+
+  const handleNavigation = (route: string) => {
+    router.push(route);
+  };
 
   const handleOpen = () => setOpen((cur) => !cur);
 
@@ -62,32 +94,74 @@ export function Navbar() {
       "resize",
       () => window.innerWidth >= 960 && setOpen(false)
     );
-  }, []);
+
+    if (!router) {
+      console.error("Router not initialized");
+    }
+  }, [router]);
 
   return (
     <MTNavbar shadow={false} fullWidth className="border-0 sticky top-0 z-50">
       <div className="container mx-auto flex items-center justify-between">
-        <Typography
-          as="a"
-          href="https://www.material-tailwind.com"
-          target="_blank"
-          color="blue-gray"
-          className="text-lg font-bold"
-        >
-          Material Tailwind
-        </Typography>
+        <Link href="/" passHref>
+          <div className="flex justify-center items-center">
+            <Image
+              src={logo} // Pass the imported logo here
+              alt="Serenity Space"
+              width={160} // Set the width
+              className="object-contain mt-1" // Ensure the aspect ratio is preserved
+            />
+          </div>
+        </Link>
+
+        {/* Sections */}
+
         <ul className="ml-10 hidden items-center gap-8 lg:flex">
-          {NAV_MENU.map(({ name, icon: Icon, href }) => (
-            <NavItem key={name} href={href}>
-              <Icon className="h-5 w-5" />
-              {name}
-            </NavItem>
-          ))}
+          {NAV_MENU.map(
+            ({ name, icon: Icon, href, isDropdown, dropdownOptions }) => (
+              <li className="relative group" key={name}>
+                {isDropdown ? (
+                  <>
+                    <div className="relative group">
+                      <div className="flex items-center space-x-2 cursor-pointer text-black">
+                        <Icon className="h-5 w-5" />
+                        <span>{name}</span>
+                      </div>
+
+                      {/* Dropdown menu */}
+                      <div className="absolute left-0 hidden mt-2 w-40 bg-white rounded-md shadow-lg group-hover:flex flex-col top-[10px] pt-2.5 px-2.5">
+                        <ul className="py-1">
+                          {dropdownOptions.map((option) => (
+                            <NavItem key={option.name}>
+                              <span
+                                className="pt-2.5"
+                                onClick={() => handleNavigation(option.route)}
+                              >
+                                {option.name}
+                              </span>
+                            </NavItem>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <NavItem key={name} href={href}>
+                    <Icon className="h-5 w-5" />
+                    {name}
+                  </NavItem>
+                )}
+              </li>
+            )
+          )}
         </ul>
+
+        {/* Profile */}
         <div className="hidden items-center gap-2 lg:flex">
-          <Button variant="text">Sign In</Button>
-          <a href="https://www.material-tailwind.com/blocks" target="_blank">
-            <Button color="gray">blocks</Button>
+          <a target="_blank">
+            <Button color="gray" onClick={handleGoToAccountClick}>
+              Profile
+            </Button>
           </a>
         </div>
         <IconButton
@@ -114,9 +188,10 @@ export function Navbar() {
             ))}
           </ul>
           <div className="mt-6 mb-4 flex items-center gap-2">
-            <Button variant="text">Sign In</Button>
-            <a href="https://www.material-tailwind.com/blocks" target="_blank">
-              <Button color="gray">blocks</Button>
+            <a target="_blank">
+              <Button color="gray" onClick={handleGoToAccountClick}>
+                Profile
+              </Button>
             </a>
           </div>
         </div>
