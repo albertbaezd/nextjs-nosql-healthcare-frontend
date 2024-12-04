@@ -25,7 +25,7 @@ export function BlogPostCard({
           height={768}
           src={image}
           alt={title}
-          className="h-full w-full scale-110 object-cover"
+          className="max-h-[450px] h-[300px] w-full scale-110 object-cover"
         />
       </CardHeader>
       <CardBody className="p-6">
