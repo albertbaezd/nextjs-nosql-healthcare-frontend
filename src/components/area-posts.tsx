@@ -94,25 +94,9 @@ export function AreaPosts({ areaId, title, description }: AreaPostsProps) {
     fetchPostsWithAuthors();
   }, [areaId, page]); // Empty dependency array ensures this runs only once on mount
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <TailSpin height="80" width="80" color="gray" ariaLabel="loading" />
-      </div>
-    );
-  }
-
   const handleShowMore = () => {
     setPage((prevPage) => prevPage + 1); // Increment page number to load more posts
   };
-
-  if (loading && posts.length === 0) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <TailSpin height="80" width="80" color="gray" ariaLabel="loading" />
-      </div>
-    );
-  }
 
   return (
     <section className="grid min-h-screen place-items-center p-8">
@@ -129,21 +113,28 @@ export function AreaPosts({ areaId, title, description }: AreaPostsProps) {
       >
         {description}
       </Typography>
-      <div className="container my-auto grid grid-cols-1 gap-x-8 gap-y-16 items-start lg:grid-cols-3">
-        {posts.map(
-          ({ id, image, area, title, description, author, createdAt }) => (
-            <BlogPostCard
-              key={id}
-              image={image}
-              area={area}
-              title={title}
-              description={description}
-              createdAt={createdAt}
-              authorName={author.name}
-            />
-          )
-        )}
-      </div>
+      {loading ? (
+        <div className="flex justify-center items-center min-h-screen">
+          <TailSpin height="80" width="80" color="gray" ariaLabel="loading" />
+        </div>
+      ) : (
+        <div className="container my-auto grid grid-cols-1 gap-x-8 gap-y-16 items-start lg:grid-cols-3">
+          {posts.map(
+            ({ id, image, area, title, description, author, createdAt }) => (
+              <BlogPostCard
+                key={id}
+                image={image}
+                area={area}
+                title={title}
+                description={description}
+                createdAt={createdAt}
+                authorName={author.name}
+              />
+            )
+          )}
+        </div>
+      )}
+
       {hasMore && (
         <div className="mt-8 flex justify-center">
           <Button

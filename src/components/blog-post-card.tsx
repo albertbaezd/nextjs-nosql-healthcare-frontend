@@ -39,10 +39,12 @@ export function BlogPostCard({
           color="blue-gray"
           className="mb-2 normal-case transition-colors hover:text-gray-900"
         >
-          {title}
+          {title && title.length > 50 ? title.slice(0, 50) + "..." : title}
         </Typography>
         <Typography className="mb-6 font-normal !text-gray-500">
-          {description}
+          {description && description.length > 350
+            ? description.slice(0, 350) + "..."
+            : description}
         </Typography>
         <div className="flex items-center gap-4">
           {/* <Avatar
