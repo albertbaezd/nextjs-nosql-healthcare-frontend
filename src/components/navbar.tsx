@@ -26,26 +26,29 @@ const NAV_MENU = [
   {
     name: "Homepage",
     icon: RectangleStackIcon,
+    route: "/",
   },
   {
     name: "Articles",
     icon: Bars3Icon, // Icon for Sections
     isDropdown: true,
     dropdownOptions: [
-      { name: "Sleep", href: "/#" },
-      { name: "Anxiety", href: "/#" },
-      { name: "Stress", href: "/#" },
-      { name: "Eating Disorders", href: "/#" },
-      { name: "Cognitive Health", href: "/#" },
+      { name: "Sleep", route: "/articles/sleep" },
+      { name: "Anxiety", route: "/articles/anxiety" },
+      { name: "Stress", route: "/articles/stress" },
+      { name: "Eating Disorders", route: "/articles/eating-disorders" },
+      { name: "Cognitive Health", route: "/articles/cognitive-health" },
     ],
   },
   {
     name: "About us",
     icon: InformationCircleIcon,
+    route: "/about",
   },
   {
     name: "Contact",
     icon: EnvelopeIcon,
+    route: "/contact",
   },
 ];
 
@@ -78,6 +81,10 @@ export function Navbar() {
 
   const handleGoToAccountClick = () => {
     router.push(`/profile/${userContext.userId}`); // Navigate to the "create account" page
+  };
+
+  const handleNavigation = (route: string) => {
+    router.push(route);
   };
 
   const handleOpen = () => setOpen((cur) => !cur);
@@ -125,8 +132,13 @@ export function Navbar() {
                       <div className="absolute left-0 hidden mt-2 w-40 bg-white rounded-md shadow-lg group-hover:flex flex-col top-[10px] pt-2.5 px-2.5">
                         <ul className="py-1">
                           {dropdownOptions.map((option) => (
-                            <NavItem key={option.name} href={option.href}>
-                              <span className="pt-2.5 ">{option.name}</span>
+                            <NavItem key={option.name}>
+                              <span
+                                className="pt-2.5"
+                                onClick={() => handleNavigation(option.route)}
+                              >
+                                {option.name}
+                              </span>
                             </NavItem>
                           ))}
                         </ul>

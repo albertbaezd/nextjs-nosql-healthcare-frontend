@@ -19,7 +19,13 @@ export default function Campaign() {
   return (
     <>
       <Navbar />
-      <Hero />
+      <Hero
+        imageUrl="https://i.imgur.com/seVlXpQ.jpeg"
+        title="Welcome to Serenity Space!"
+        description="Welcome to Serenity Space, your go-to resource for health and
+      wellness tips. Explore our expert insights and practical advice to
+      help you live a balanced and fulfilling life."
+      />
       <Posts />
       <Videos />
       <Footer />
