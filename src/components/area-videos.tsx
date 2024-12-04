@@ -16,6 +16,7 @@ interface AreaVideosProps {
   title: string;
   description: string;
   bannerUrl: string;
+  mostPopular?: boolean;
 }
 
 export function AreaVideos({
@@ -23,49 +24,21 @@ export function AreaVideos({
   title,
   description,
   bannerUrl,
+  mostPopular,
 }: AreaVideosProps) {
   const [videos, setVideos] = useState<Video[]>([]); // State to store fetched data
   const [loading, setLoading] = useState(true); // State to track loading status
   const [page, setPage] = useState(1); // State to track current page
   const [hasMore, setHasMore] = useState(true); // State to track if there are more videos
 
-  //   useEffect(() => {
-  //     const fetchVideosData = async () => {
-  //       try {
-  //         const response = await axios.get<VideoBackend>(
-  //           `${process.env.NEXT_PUBLIC_API_URL}/video?limit=6`
-  //         );
-  //         console.log(response.data);
-  //         // setVideos(response.data.videos); // Store the data in the state
-  //         const videos = response.data.videos;
-  //         setVideos(
-  //           videos.map((vid, idx) => {
-  //             return {
-  //               id: vid._id,
-  //               area: vid.area.name,
-  //               title: vid.title,
-  //               description: vid.description,
-  //               videoId: vid.videoId,
-  //               thumbnail: vid.thumbnail,
-  //               createdAt: vid.createdAt,
-  //             };
-  //           })
-  //         );
-  //       } catch (error) {
-  //         console.error("Error fetching data", error);
-  //       } finally {
-  //         setLoading(false); // Set loading to false once data is fetched
-  //       }
-  //     };
-
-  //     fetchVideosData(); // Call the fetch function
-  //   }, []);
-
   const fetchVideosData = async (page: number) => {
     try {
-      const response = await axios.get<VideoBackend>(
-        `${process.env.NEXT_PUBLIC_API_URL}/video?limit=6&page=${page}`
-      );
+      // add url for get most popular videos by healthcare area
+      const url = mostPopular
+        ? `${process.env.NEXT_PUBLIC_API_URL}/video/area/${areaId}?limit=6&page=${page}`
+        : `${process.env.NEXT_PUBLIC_API_URL}/video/area/${areaId}?limit=6&page=${page}`;
+
+      const response = await axios.get<VideoBackend>(url);
 
       const fetchedVideos: any[] = response.data.videos;
 
