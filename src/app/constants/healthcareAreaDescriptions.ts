@@ -121,7 +121,7 @@ export const AREA_DETAILS = {
   },
   ["cognitive-health"]: {
     hero: {
-      imageUrl: "https://i.imgur.com/JvF9Oxk.jpeg",
+      imageUrl: "https://i.imgur.com/Rx5sVDy.jpeg",
       title: "Cognitive Health",
       description:
         "Boost your cognitive health with helpful tips and resources.",

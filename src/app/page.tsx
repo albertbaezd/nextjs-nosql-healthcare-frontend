@@ -7,13 +7,19 @@ import Hero from "./hero";
 import Posts from "./posts";
 import Videos from "./videos";
 import { useUser } from "../app/context/userContext";
+import { useRouter } from "next/navigation";
 
 export default function Campaign() {
   const { userContext, setUserContext } = useUser();
 
+  const router = useRouter();
+
   useEffect(() => {
     // This will run only once after the first render
     console.log("Current user context:", userContext);
+    if (userContext.userId == null) {
+      router.push("/login");
+    }
   }, []);
 
   return (
