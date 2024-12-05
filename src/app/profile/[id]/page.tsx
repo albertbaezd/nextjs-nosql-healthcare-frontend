@@ -8,7 +8,7 @@ import {
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import apiClient from "@/lib/apiClient";
 
 import { useRouter, useParams } from "next/navigation";
 import { Navbar, Footer } from "@/components";
@@ -47,9 +47,7 @@ function Profile() {
   // Function to fetch user data by ID
   const getUserById = async (id: string) => {
     try {
-      const response = await axios.get<User>(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/${id}`
-      );
+      const response = await apiClient.get<User>(`/users/${id}`);
       setUserData(response.data); // Set the user data (no type error now)
       setLoading(false);
     } catch (err) {
@@ -113,10 +111,7 @@ function Profile() {
     }),
     onSubmit: async (values) => {
       try {
-        await axios.put(
-          `${process.env.NEXT_PUBLIC_API_URL}/users/${userContext.userId}`,
-          values
-        );
+        await apiClient.put(`/users/${userContext.userId}`, values);
         setUserData({ ...userData, ...values } as User);
         setIsEditing(false);
       } catch (error) {

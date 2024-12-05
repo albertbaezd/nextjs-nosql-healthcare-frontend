@@ -179,10 +179,15 @@ export function Navbar() {
                       </div>
                     </>
                   ) : (
-                    <NavItem key={name} onClick={() => handleNavigation(route)}>
-                      <Icon className="h-5 w-5" />
-                      <span>{name}</span>
-                    </NavItem>
+                    <ul>
+                      <NavItem
+                        key={name}
+                        onClick={() => handleNavigation(route)}
+                      >
+                        <Icon className="h-5 w-5" />
+                        <span>{name}</span>
+                      </NavItem>
+                    </ul>
                   )}
                 </li>
               );

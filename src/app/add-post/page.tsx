@@ -11,7 +11,7 @@ import {
   Option,
 } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import apiClient from "@/lib/apiClient";
 import { useSnackbar } from "notistack";
 import { useUser } from "../context/userContext";
 
@@ -59,18 +59,15 @@ const CreatePost = () => {
       const areaId = areaEnum[values.area as keyof typeof areaEnum];
 
       try {
-        const response = await axios.post<PostCreateResponse>(
-          `${process.env.NEXT_PUBLIC_API_URL}/posts/`,
-          {
-            title: values.title,
-            description: values.description,
-            body: values.body,
-            area: values.area,
-            areaId: areaId,
-            authorId: userContext.userId,
-            image: "https://i.imgur.com/z2u8xvJ.jpeg",
-          }
-        );
+        const response = await apiClient.post<PostCreateResponse>(`/posts/`, {
+          title: values.title,
+          description: values.description,
+          body: values.body,
+          area: values.area,
+          areaId: areaId,
+          authorId: userContext.userId,
+          image: "https://i.imgur.com/z2u8xvJ.jpeg",
+        });
 
         if (response.status === 201) {
           enqueueSnackbar("Post created successfully", { variant: "success" });

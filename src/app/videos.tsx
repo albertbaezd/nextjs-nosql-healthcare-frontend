@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
-import axios from "axios";
+import apiClient from "@/lib/apiClient";
 
 import { Typography } from "@material-tailwind/react";
 import VideoCard from "@/components/video-card";
@@ -17,9 +17,7 @@ export function Videos() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<VideoBackend>(
-          `${process.env.NEXT_PUBLIC_API_URL}/video?limit=6`
-        );
+        const response = await apiClient.get<VideoBackend>(`/video?limit=6`);
         console.log(response.data);
         // setVideos(response.data.videos); // Store the data in the state
         const videos = response.data.videos;

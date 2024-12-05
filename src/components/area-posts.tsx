@@ -5,7 +5,7 @@ import { Button, Typography } from "@material-tailwind/react";
 import { ArrowSmallDownIcon } from "@heroicons/react/24/solid";
 import BlogPostCard from "@/components/blog-post-card";
 
-import axios from "axios";
+import apiClient from "@/lib/apiClient";
 
 import { Post, PostBackend, Author } from "../app/types/types";
 import { formatDate } from "../app/constants/constants";
@@ -35,15 +35,15 @@ export function AreaPosts({
     const fetchPostsWithAuthors = async () => {
       try {
         // Fetch all posts from the new URL
-        // const postsResponse = await axios.get<PostBackend>(
-        //   `${process.env.NEXT_PUBLIC_API_URL}/posts/area/${areaId}?limit=6&page=${page}`
+        // const postsResponse = await apiClient.get<PostBackend>(
+        //   `/posts/area/${areaId}?limit=6&page=${page}`
         // );
 
         const url = mostPopular
-          ? `${process.env.NEXT_PUBLIC_API_URL}/posts/area/${areaId}/mostpopular?limit=6&page=${page}`
-          : `${process.env.NEXT_PUBLIC_API_URL}/posts/area/${areaId}?limit=6&page=${page}`;
+          ? `/posts/area/${areaId}/mostpopular?limit=6&page=${page}`
+          : `/posts/area/${areaId}?limit=6&page=${page}`;
 
-        const postsResponse = await axios.get<PostBackend>(url);
+        const postsResponse = await apiClient.get<PostBackend>(url);
         const posts: any[] = postsResponse.data.posts;
 
         // If no posts were returned, stop further requests
@@ -56,8 +56,8 @@ export function AreaPosts({
         const mappedPosts = await Promise.all(
           posts.map(async (post: any) => {
             try {
-              const authorResponse = await axios.get<Author>(
-                `${process.env.NEXT_PUBLIC_API_URL}/users/${post.authorId}`
+              const authorResponse = await apiClient.get<Author>(
+                `/users/${post.authorId}`
               );
               const author = authorResponse.data;
 

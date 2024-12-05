@@ -1,4 +1,5 @@
 "use client";
+import { setToken } from "@/lib/authToken";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 // Define the shape of user data
@@ -76,6 +77,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       speciality: null,
     });
     localStorage.removeItem("userContext");
+    setToken(null);
   };
 
   return (

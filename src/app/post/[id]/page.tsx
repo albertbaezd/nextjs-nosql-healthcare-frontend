@@ -1,14 +1,12 @@
 "use client";
 import { Avatar, Typography, Button, Textarea } from "@material-tailwind/react";
 import {
-  MapPinIcon,
-  GlobeAltIcon,
-  BuildingLibraryIcon,
+  ClockIcon,
   BookOpenIcon,
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import apiClient from "@/lib/apiClient";
 
 import { useRouter, useParams } from "next/navigation";
 import { Navbar, Footer } from "@/components";
@@ -19,8 +17,7 @@ import { TailSpin } from "react-loader-spinner";
 import { useUser } from "@/app/context/userContext";
 import { PostWithComments } from "@/app/types/types";
 import Modal from "@/components/modal";
-// import { Post, PostBackend, Author } from "../types/types";
-// import { Post, PostBackend, Author } from "../../../app/types";
+import { formatDate } from "../../constants/constants";
 
 const initialPostWithComments: PostWithComments = {
   id: "",
@@ -84,8 +81,8 @@ function Post() {
   // Function to fetch post data by ID
   const getPostById = async (id: string) => {
     try {
-      const response = await axios.get<PostWithComments>(
-        `${process.env.NEXT_PUBLIC_API_URL}/posts/full/${id}`
+      const response = await apiClient.get<PostWithComments>(
+        `/posts/full/${id}`
       );
       setPostData(response.data);
       setLoading(false);
@@ -118,14 +115,11 @@ function Post() {
       if (!values.body.trim()) return; // Prevent submitting empty comments
       try {
         // Send the comment to the API
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/comments`,
-          {
-            authorId: userContext.userId,
-            body: values.body,
-            postId: id,
-          }
-        );
+        const response = await apiClient.post(`/comments`, {
+          authorId: userContext.userId,
+          body: values.body,
+          postId: id,
+        });
 
         // Optionally, update the post data with the new comment
         setPostData((prevPostData) => ({
@@ -155,9 +149,7 @@ function Post() {
 
   const handleDeleteComment = async (commentId: string) => {
     try {
-      await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/comments/comment/${commentId}`
-      );
+      await apiClient.delete(`/comments/comment/${commentId}`);
       setPostData({
         ...postData,
         comments: postData.comments.filter(
@@ -171,7 +163,7 @@ function Post() {
 
   const handleDeletePost = async (postId: string) => {
     try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/posts/${postId}`);
+      await apiClient.delete(`/posts/${postId}`);
       router.push("/"); // Redirect to the home page
     } catch (error) {
       console.error("Error deleting post:", error);
@@ -250,17 +242,17 @@ function Post() {
               </div>
               <div className="-mt-4 container space-y-2">
                 <div className="flex items-center gap-2">
-                  {/* <MapPinIcon className="-mt-px h-4 w-4 text-blue-gray-500" /> */}
-                  <MapPinIcon className="-mt-px h-4 w-4 text-blue-gray-500" />
+                  {/* <ClockIcon className="-mt-px h-4 w-4 text-blue-gray-500" /> */}
+                  <ClockIcon className="-mt-px h-4 w-4 text-blue-gray-500" />
                   <div className="flex w-full gap-2">
                     <Typography className="font-medium text-blue-gray-500">
-                      {postData.createdAt}
+                      {formatDate(postData.createdAt)}
                       {/* postData.createdAt */}
                     </Typography>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <GlobeAltIcon className="-mt-px h-4 w-4 text-blue-gray-500" />
+                  <BookOpenIcon className="-mt-px h-4 w-4 text-blue-gray-500" />
                   <Typography className="font-medium text-blue-gray-500">
                     {postData.area}
                   </Typography>

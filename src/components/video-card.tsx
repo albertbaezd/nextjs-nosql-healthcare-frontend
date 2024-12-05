@@ -53,11 +53,11 @@ export function VideoCard({
               : description}
           </Typography>
           <Typography
-            variant="medium"
+            variant="paragraph"
             color="blue"
             className="mb-2 font-medium"
           >
-            {area}
+            <span>{area}</span>
           </Typography>
         </CardBody>
       </Card>

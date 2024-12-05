@@ -5,112 +5,10 @@ import { Button, Typography } from "@material-tailwind/react";
 import { ArrowSmallDownIcon } from "@heroicons/react/24/solid";
 import BlogPostCard from "@/components/blog-post-card";
 
-import axios from "axios";
-
 import { Post, PostBackend, Author } from "./types/types";
 import { formatDate } from "./constants/constants";
 import { TailSpin } from "react-loader-spinner";
-
-// const fetchPostsWithAuthors = async () => {
-//   try {
-//     // Fetch all posts from the new URL
-//     const postsResponse = await axios.get(
-//       `${process.env.NEXT_PUBLIC_API_URL}/posts`
-//     );
-//     const posts = postsResponse.data;
-
-//     // For each post, fetch the author using the authorId
-//     // const postsWithAuthors = await Promise.all(
-//     //   posts.map(async (post) => {
-//     //     const authorResponse = await axios.get(
-//     //       `${process.env.NEXT_PUBLIC_API_URL}/authors/${post.authorId}`
-//     //     );
-//     //     const author = authorResponse.data;
-
-//     //     // Return the post with the author's name added
-//     //     return {
-//     //       ...post,
-//     //       authorName: author.name, // Assuming the author has a 'name' field
-//     //     };
-//     //   })
-//     // );
-
-//     // return postsWithAuthors;
-//     console.log(posts);
-//     return posts;
-//   } catch (error) {
-//     console.error("Error fetching posts or authors:", error);
-//   }
-// };
-
-// const POSTS = [
-//   {
-//     img: `/image/blogs/blog2.svg`,
-//     tag: "Enterprise",
-//     title: "The key new features and changes in Tailwind CSS",
-//     desc: "Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens bed design but the back is too high for the beams and angle of the ceiling I also wanted to point out.",
-//     date: "10 September 2022",
-//     author: {
-//       img: `/image/avatar1.jpg`,
-//       name: "Ryan Samuel",
-//     },
-//   },
-//   {
-//     img: `/image/blogs/blog6.svg`,
-//     tag: "Startups",
-//     title: "Lyft launching cross-platform service this week",
-//     desc: "Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens bed design but the back is too high for the beams and angle of the ceiling I also wanted to point out.",
-//     date: "12 September 2022",
-//     author: {
-//       img: `/image/blogs/blog2.svg`,
-//       name: "Nora Hazel",
-//     },
-//   },
-//   {
-//     img: `/image/blogs/blog3.svg`,
-//     tag: "Trending",
-//     title: "6 insights into the French Fashion landscape",
-//     desc: "Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens bed design but the back is too high for the beams and angle of the ceiling I also wanted to point out.",
-//     date: "16 September 2022",
-//     author: {
-//       img: `/image/avatar2.jpg`,
-//       name: "Otto Gonzalez",
-//     },
-//   },
-//   {
-//     img: `/image/blogs/blog4.svg`,
-//     tag: "Lifestyle",
-//     title: "Autodesk looks to future of 3D printing with Project",
-//     desc: "Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens bed design but the back is too high for the beams and angle of the ceiling I also wanted to point out.",
-//     date: "18 September 2022",
-//     author: {
-//       img: `/image/avatar3.jpg`,
-//       name: "Ryan Samuel",
-//     },
-//   },
-//   {
-//     img: `/image/blogs/blog5.svg`,
-//     tag: "Enterprise",
-//     title: "Autodesk looks to future of 3D printing with Project",
-//     desc: "Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens bed design but the back is too high for the beams and angle of the ceiling I also wanted to point out.",
-//     date: "10 September 2022",
-//     author: {
-//       img: `/image/avatar3.jpg`,
-//       name: "Ryan Samuel",
-//     },
-//   },
-//   {
-//     img: `/image/blogs/blog6.svg`,
-//     tag: "Startups",
-//     title: "Lyft launching cross-platform service this week",
-//     desc: "Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens bed design but the back is too high for the beams and angle of the ceiling I also wanted to point out.",
-//     date: "12 September 2022",
-//     author: {
-//       img: `/image/avatar2.jpg`,
-//       name: "Nora Hazel",
-//     },
-//   },
-// ];
+import apiClient from "@/lib/apiClient";
 
 export function Posts() {
   const [posts, setPosts] = useState<Post[]>([]); // State to store the posts
@@ -120,8 +18,8 @@ export function Posts() {
     const fetchPostsWithAuthors = async () => {
       try {
         // Fetch all posts from the new URL
-        const postsResponse = await axios.get<PostBackend>(
-          `${process.env.NEXT_PUBLIC_API_URL}/posts?limit=6`
+        const postsResponse = await apiClient.get<PostBackend>(
+          `/posts?limit=6`
         );
         const posts = postsResponse.data.posts;
 
@@ -130,8 +28,8 @@ export function Posts() {
           posts.map(async (post: any) => {
             try {
               // Fetch the author by their ID from the correct route
-              const authorResponse = await axios.get<Author>(
-                `${process.env.NEXT_PUBLIC_API_URL}/users/${post.authorId}`
+              const authorResponse = await apiClient.get<Author>(
+                `/users/${post.authorId}`
               );
               const author = authorResponse.data;
 
