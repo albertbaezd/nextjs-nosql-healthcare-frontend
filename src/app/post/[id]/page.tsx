@@ -21,21 +21,6 @@ import { PostWithComments } from "@/app/types/types";
 // import { Post, PostBackend, Author } from "../types/types";
 // import { Post, PostBackend, Author } from "../../../app/types";
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  createdAt: string;
-  profilePictureUrl: string;
-  city: string;
-  state: string;
-  country: string;
-  description: string;
-  university: string;
-  speciality: string;
-}
-
 export const initialPostWithComments: PostWithComments = {
   id: "",
   image: "",
@@ -314,6 +299,40 @@ function Profile() {
           </div>
         </div>
       </section>
+
+      {/* Comments Section */}
+      <section className="bg-gray-50 py-10">
+        <div className="container mx-auto space-y-6">
+          <Typography variant="h5" color="blue-gray">
+            {postData.comments.length} comments
+          </Typography>
+
+          {postData.comments.length > 0 ? (
+            postData.comments.map((comment) => (
+              <div key={comment._id} className="border-b py-4">
+                <div className="flex items-start gap-4">
+                  <Avatar
+                    src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
+                    alt={comment.author.id}
+                  />
+                  <div>
+                    <Typography className="font-semibold">
+                      {comment.author.authorName}
+                    </Typography>
+                    <Typography className="text-gray-500">
+                      {new Date(comment.createdAt).toLocaleString()}
+                    </Typography>
+                    <Typography className="mt-2">{comment.body}</Typography>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <Typography color="gray">No comments yet.</Typography>
+          )}
+        </div>
+      </section>
+
       <div className="bg-white">
         <Footer omitSubscription={true} />
       </div>

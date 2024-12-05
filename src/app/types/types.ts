@@ -39,7 +39,10 @@ export interface PostWithComments {
   comments: [
     {
       _id: string; // Unique ID for the comment
-      authorId: string; // ID of the author of the comment
+      author: {
+        id: string;
+        authorName: string;
+      };
       body: string; // Content of the comment
       postId: string; // ID of the post this comment is associated with
       createdAt: string; // Timestamp of when the comment was created
