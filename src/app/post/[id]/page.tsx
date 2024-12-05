@@ -38,7 +38,10 @@ export const initialPostWithComments: PostWithComments = {
   comments: [
     {
       _id: "",
-      authorId: "",
+      author: {
+        id: "",
+        authorName: "",
+      },
       body: "",
       postId: "",
       createdAt: "",
