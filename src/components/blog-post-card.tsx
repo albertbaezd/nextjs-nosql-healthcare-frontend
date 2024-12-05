@@ -16,9 +16,13 @@ export function BlogPostCard({
   description,
   authorName,
   createdAt,
+  commentCount,
 }: BlogPostCardProps) {
   return (
-    <Card shadow={true}>
+    <Card
+      shadow={true}
+      className="transition-transform transform hover:scale-105 hover:shadow-lg cursor-pointer"
+    >
       <CardHeader>
         <Image
           width={768}
@@ -39,10 +43,12 @@ export function BlogPostCard({
           color="blue-gray"
           className="mb-2 normal-case transition-colors hover:text-gray-900"
         >
-          {title}
+          {title && title.length > 50 ? title.slice(0, 50) + "..." : title}
         </Typography>
         <Typography className="mb-6 font-normal !text-gray-500">
-          {description}
+          {description && description.length > 350
+            ? description.slice(0, 350) + "..."
+            : description}
         </Typography>
         <div className="flex items-center gap-4">
           {/* <Avatar
@@ -66,6 +72,15 @@ export function BlogPostCard({
             >
               {createdAt}
             </Typography>
+            {commentCount > 0 && (
+              <Typography
+                variant="small"
+                color="blue-gray"
+                className="mb-0.5 !font-medium"
+              >
+                {commentCount} comments
+              </Typography>
+            )}
           </div>
         </div>
       </CardBody>

@@ -9,29 +9,6 @@ import { Typography } from "@material-tailwind/react";
 import VideoCard from "@/components/video-card";
 
 import { Video, VideoBackend } from "./types/types";
-// const ARTICLES = [
-//   {
-//     thumbnail: "/image/blogs/blog-1.png",
-//     title: "Blockchain Development: How to learn",
-//     description:
-//       "This article offers valuable insights into the skills, resources, and steps needed to embark on a journey in blockchain development.",
-//     videoId: "DewXw3_2334",
-//   },
-//   {
-//     thumbnail: "/image/blogs/blog-2.png",
-//     title: "How to become a full stack developer - Roadmap",
-//     description:
-//       "For those aspiring to become full stack developers, this roadmap is your ultimate guide. This article outlines the key milestones.",
-//     videoId: "trol7WyWRAE",
-//   },
-//   {
-//     thumbnail: "/image/blogs/blog-3.png",
-//     title: "Join the Web 3 Conference 2023 - Registration details",
-//     description:
-//       "This article provides essential registration details for this exciting event where experts gather to explore the latest developments",
-//     videoId: "XMIlCq_RZew",
-//   },
-// ];
 
 export function Videos() {
   const [videos, setVideos] = useState<Video[]>([]); // State to store fetched data

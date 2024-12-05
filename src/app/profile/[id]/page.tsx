@@ -15,6 +15,7 @@ import { Navbar, Footer } from "@/components";
 import { useFormik } from "formik";
 import { TailSpin } from "react-loader-spinner";
 import * as Yup from "yup";
+import { useUser } from "@/app/context/userContext";
 
 interface User {
   id: string;
@@ -40,6 +41,7 @@ export function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const { userContext, setUserContext } = useUser();
 
   console.log("User ID from URL:", id);
   // Function to fetch user data by ID
@@ -62,6 +64,11 @@ export function Profile() {
       getUserById(id); // Call the function with the ID from the URL
     }
   }, [id]);
+
+  useEffect(() => {
+    // This will run only once after the first render
+    console.log("Current user context:", userContext);
+  }, [userContext]);
 
   // Redirect to /home if no user is found
   useEffect(() => {
@@ -103,7 +110,10 @@ export function Profile() {
     }),
     onSubmit: async (values) => {
       try {
-        //  await axios.put(`http://localhost:3000/api/users/${id}`, values);
+        await axios.put(
+          `http://localhost:3000/api/users/${userContext.userId}`,
+          values
+        );
         setUserData({ ...userData, ...values } as User);
         setIsEditing(false);
       } catch (error) {
@@ -355,7 +365,7 @@ export function Profile() {
 
               {/* Action Buttons */}
               <div className="mt-4 flex gap-4">
-                {!isEditing && (
+                {!isEditing && userContext.userId == id && (
                   <Button onClick={() => setIsEditing(true)}>Edit</Button>
                 )}
                 {isEditing && (

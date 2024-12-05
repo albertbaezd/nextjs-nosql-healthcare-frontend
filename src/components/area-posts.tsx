@@ -16,10 +16,16 @@ interface AreaPostsProps {
   areaId: string; // or number, depending on your use case
   title: string;
   description: string;
+  mostPopular?: boolean;
 }
 
 // Functional component that accepts the props
-export function AreaPosts({ areaId, title, description }: AreaPostsProps) {
+export function AreaPosts({
+  areaId,
+  title,
+  description,
+  mostPopular,
+}: AreaPostsProps) {
   const [posts, setPosts] = useState<Post[]>([]); // State to store the posts
   const [loading, setLoading] = useState<boolean>(true); // State for loading status
   const [page, setPage] = useState<number>(1); // Track the current page for pagination
@@ -29,13 +35,20 @@ export function AreaPosts({ areaId, title, description }: AreaPostsProps) {
     const fetchPostsWithAuthors = async () => {
       try {
         // Fetch all posts from the new URL
-        const postsResponse = await axios.get<PostBackend>(
-          `${process.env.NEXT_PUBLIC_API_URL}/posts/area/${areaId}?limit=6&page=${page}`
-        );
-        const posts = postsResponse.data.posts;
+        // const postsResponse = await axios.get<PostBackend>(
+        //   `${process.env.NEXT_PUBLIC_API_URL}/posts/area/${areaId}?limit=6&page=${page}`
+        // );
+
+        const url = mostPopular
+          ? `${process.env.NEXT_PUBLIC_API_URL}/posts/area/${areaId}/mostpopular?limit=6&page=${page}`
+          : `${process.env.NEXT_PUBLIC_API_URL}/posts/area/${areaId}?limit=6&page=${page}`;
+
+        const postsResponse = await axios.get<PostBackend>(url);
+        const posts: any[] = postsResponse.data.posts;
 
         // If no posts were returned, stop further requests
-        if (!posts.length) {
+        console.log("posts", postsResponse);
+        if (posts.length === 0) {
           setHasMore(false);
         }
 
@@ -60,6 +73,7 @@ export function AreaPosts({ areaId, title, description }: AreaPostsProps) {
                   profilePicture: author.profilePicture || "",
                 },
                 createdAt: formatDate(post.createdAt),
+                commentCount: post.commentCount || 0,
               };
             } catch (error) {
               console.error(
@@ -77,6 +91,7 @@ export function AreaPosts({ areaId, title, description }: AreaPostsProps) {
                   profilePicture: "",
                 },
                 createdAt: post.createdAt,
+                commentCount: post.commentCount || 0,
               };
             }
           })
@@ -87,6 +102,7 @@ export function AreaPosts({ areaId, title, description }: AreaPostsProps) {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching posts:", error);
+        setHasMore(false); // no more posts to load, then the show more is not shown
         setLoading(false); // Set loading to false even if there's an error
       }
     };
@@ -94,25 +110,9 @@ export function AreaPosts({ areaId, title, description }: AreaPostsProps) {
     fetchPostsWithAuthors();
   }, [areaId, page]); // Empty dependency array ensures this runs only once on mount
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <TailSpin height="80" width="80" color="gray" ariaLabel="loading" />
-      </div>
-    );
-  }
-
   const handleShowMore = () => {
     setPage((prevPage) => prevPage + 1); // Increment page number to load more posts
   };
-
-  if (loading && posts.length === 0) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <TailSpin height="80" width="80" color="gray" ariaLabel="loading" />
-      </div>
-    );
-  }
 
   return (
     <section className="grid min-h-screen place-items-center p-8">
@@ -129,21 +129,38 @@ export function AreaPosts({ areaId, title, description }: AreaPostsProps) {
       >
         {description}
       </Typography>
-      <div className="container my-auto grid grid-cols-1 gap-x-8 gap-y-16 items-start lg:grid-cols-3">
-        {posts.map(
-          ({ id, image, area, title, description, author, createdAt }) => (
-            <BlogPostCard
-              key={id}
-              image={image}
-              area={area}
-              title={title}
-              description={description}
-              createdAt={createdAt}
-              authorName={author.name}
-            />
-          )
-        )}
-      </div>
+      {loading ? (
+        <div className="flex justify-center items-center min-h-screen">
+          <TailSpin height="80" width="80" color="gray" ariaLabel="loading" />
+        </div>
+      ) : (
+        <div className="container my-auto grid grid-cols-1 gap-x-8 gap-y-16 items-start lg:grid-cols-3">
+          {posts.map(
+            ({
+              id,
+              image,
+              area,
+              title,
+              description,
+              author,
+              createdAt,
+              commentCount,
+            }) => (
+              <BlogPostCard
+                key={id}
+                image={image}
+                area={area}
+                title={title}
+                description={description}
+                createdAt={createdAt}
+                authorName={author.name}
+                commentCount={commentCount}
+              />
+            )
+          )}
+        </div>
+      )}
+
       {hasMore && (
         <div className="mt-8 flex justify-center">
           <Button

@@ -5,6 +5,7 @@ export interface BlogPostCardProps {
   description: string;
   authorName: string;
   createdAt: string;
+  commentCount?: number;
 }
 
 export interface Post {
@@ -19,6 +20,7 @@ export interface Post {
     profilePicture?: string;
   };
   createdAt: string;
+  commentCount?: number;
 }
 
 export interface PostBackend {
@@ -39,6 +41,7 @@ export interface PostBackend {
       };
       authorId: string;
       createdAt: string;
+      commentCount?: number;
     }
   ];
 }
