@@ -5,112 +5,10 @@ import { Button, Typography } from "@material-tailwind/react";
 import { ArrowSmallDownIcon } from "@heroicons/react/24/solid";
 import BlogPostCard from "@/components/blog-post-card";
 
-import axios from "axios";
-
 import { Post, PostBackend, Author } from "./types/types";
 import { formatDate } from "./constants/constants";
 import { TailSpin } from "react-loader-spinner";
-
-// const fetchPostsWithAuthors = async () => {
-//   try {
-//     // Fetch all posts from the new URL
-//     const postsResponse = await axios.get(
-//       `${process.env.NEXT_PUBLIC_API_URL}/posts`
-//     );
-//     const posts = postsResponse.data;
-
-//     // For each post, fetch the author using the authorId
-//     // const postsWithAuthors = await Promise.all(
-//     //   posts.map(async (post) => {
-//     //     const authorResponse = await axios.get(
-//     //       `${process.env.NEXT_PUBLIC_API_URL}/authors/${post.authorId}`
-//     //     );
-//     //     const author = authorResponse.data;
-
-//     //     // Return the post with the author's name added
-//     //     return {
-//     //       ...post,
-//     //       authorName: author.name, // Assuming the author has a 'name' field
-//     //     };
-//     //   })
-//     // );
-
-//     // return postsWithAuthors;
-//     console.log(posts);
-//     return posts;
-//   } catch (error) {
-//     console.error("Error fetching posts or authors:", error);
-//   }
-// };
-
-// const POSTS = [
-//   {
-//     img: `/image/blogs/blog2.svg`,
-//     tag: "Enterprise",
-//     title: "The key new features and changes in Tailwind CSS",
-//     desc: "Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens bed design but the back is too high for the beams and angle of the ceiling I also wanted to point out.",
-//     date: "10 September 2022",
-//     author: {
-//       img: `/image/avatar1.jpg`,
-//       name: "Ryan Samuel",
-//     },
-//   },
-//   {
-//     img: `/image/blogs/blog6.svg`,
-//     tag: "Startups",
-//     title: "Lyft launching cross-platform service this week",
-//     desc: "Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens bed design but the back is too high for the beams and angle of the ceiling I also wanted to point out.",
-//     date: "12 September 2022",
-//     author: {
-//       img: `/image/blogs/blog2.svg`,
-//       name: "Nora Hazel",
-//     },
-//   },
-//   {
-//     img: `/image/blogs/blog3.svg`,
-//     tag: "Trending",
-//     title: "6 insights into the French Fashion landscape",
-//     desc: "Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens bed design but the back is too high for the beams and angle of the ceiling I also wanted to point out.",
-//     date: "16 September 2022",
-//     author: {
-//       img: `/image/avatar2.jpg`,
-//       name: "Otto Gonzalez",
-//     },
-//   },
-//   {
-//     img: `/image/blogs/blog4.svg`,
-//     tag: "Lifestyle",
-//     title: "Autodesk looks to future of 3D printing with Project",
-//     desc: "Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens bed design but the back is too high for the beams and angle of the ceiling I also wanted to point out.",
-//     date: "18 September 2022",
-//     author: {
-//       img: `/image/avatar3.jpg`,
-//       name: "Ryan Samuel",
-//     },
-//   },
-//   {
-//     img: `/image/blogs/blog5.svg`,
-//     tag: "Enterprise",
-//     title: "Autodesk looks to future of 3D printing with Project",
-//     desc: "Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens bed design but the back is too high for the beams and angle of the ceiling I also wanted to point out.",
-//     date: "10 September 2022",
-//     author: {
-//       img: `/image/avatar3.jpg`,
-//       name: "Ryan Samuel",
-//     },
-//   },
-//   {
-//     img: `/image/blogs/blog6.svg`,
-//     tag: "Startups",
-//     title: "Lyft launching cross-platform service this week",
-//     desc: "Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens bed design but the back is too high for the beams and angle of the ceiling I also wanted to point out.",
-//     date: "12 September 2022",
-//     author: {
-//       img: `/image/avatar2.jpg`,
-//       name: "Nora Hazel",
-//     },
-//   },
-// ];
+import apiClient from "@/lib/apiClient";
 
 export function Posts() {
   const [posts, setPosts] = useState<Post[]>([]); // State to store the posts
@@ -120,8 +18,8 @@ export function Posts() {
     const fetchPostsWithAuthors = async () => {
       try {
         // Fetch all posts from the new URL
-        const postsResponse = await axios.get<PostBackend>(
-          `${process.env.NEXT_PUBLIC_API_URL}/posts?limit=6`
+        const postsResponse = await apiClient.get<PostBackend>(
+          `/posts/latest?limit=6`
         );
         const posts = postsResponse.data.posts;
 
@@ -130,8 +28,8 @@ export function Posts() {
           posts.map(async (post: any) => {
             try {
               // Fetch the author by their ID from the correct route
-              const authorResponse = await axios.get<Author>(
-                `${process.env.NEXT_PUBLIC_API_URL}/users/${post.authorId}`
+              const authorResponse = await apiClient.get<Author>(
+                `/users/${post.authorId}`
               );
               const author = authorResponse.data;
 
@@ -172,6 +70,7 @@ export function Posts() {
         );
 
         // Set the mapped posts with author details
+        // @ts-ignore
         setPosts(mappedPosts);
 
         console.log("posts with authors:", mappedPosts);
@@ -195,24 +94,15 @@ export function Posts() {
 
   return (
     <section className="grid min-h-screen place-items-center p-8">
-      {/* <Tabs value="trends" className="mx-auto max-w-7xl w-full mb-16 ">
-        <div className="w-full flex mb-8 flex-col items-center">
-          <TabsHeader className="h-10 !w-12/12 md:w-[50rem] border border-white/25 bg-opacity-90">
-            <Tab value="trends">Trends</Tab>
-            <Tab value="frontend">Frontend</Tab>
-            <Tab value="backend">Backend</Tab>
-            <Tab value="cloud">Cloud</Tab>
-            <Tab value="ai">AI</Tab>
-            <Tab value="tools">Tools</Tab>
-          </TabsHeader>
-        </div>
-      </Tabs> */}
+      {/* @ts-ignore */}
       <Typography variant="h6" className="mb-2">
         Newest posts
       </Typography>
+      {/* @ts-ignore */}
       <Typography variant="h1" className="mb-2">
         Read our latest stories!
       </Typography>
+      {/* @ts-ignore */}
       <Typography
         variant="lead"
         color="gray"

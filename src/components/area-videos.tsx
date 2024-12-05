@@ -1,9 +1,10 @@
+// @ts-nocheck
 "use client";
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
-import axios from "axios";
+import apiClient from "@/lib/apiClient";
 
 import { Typography, Button } from "@material-tailwind/react";
 import VideoCard from "@/components/video-card";
@@ -35,10 +36,10 @@ export function AreaVideos({
     try {
       // add url for get most popular videos by healthcare area
       const url = mostPopular
-        ? `${process.env.NEXT_PUBLIC_API_URL}/video/area/${areaId}?limit=6&page=${page}`
-        : `${process.env.NEXT_PUBLIC_API_URL}/video/area/${areaId}?limit=6&page=${page}`;
+        ? `/video/area/${areaId}?limit=6&page=${page}`
+        : `/video/area/${areaId}?limit=6&page=${page}`;
 
-      const response = await axios.get<VideoBackend>(url);
+      const response = await apiClient.get<VideoBackend>(url);
 
       const fetchedVideos: any[] = response.data.videos;
 

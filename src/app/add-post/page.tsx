@@ -11,7 +11,7 @@ import {
   Option,
 } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import apiClient from "@/lib/apiClient";
 import { useSnackbar } from "notistack";
 import { useUser } from "../context/userContext";
 
@@ -33,6 +33,16 @@ const areaEnum = {
   Stress: "6731390f7ce2f8d342e4ab4d",
   ["Eating disorders"]: "6731391e7ce2f8d342e4ab4f",
   ["Cognitive health"]: "6731392f7ce2f8d342e4ab51",
+};
+
+type AreaEnumKeys = keyof typeof areaEnumReversed;
+
+const areaEnumReversed = {
+  "673138f57ce2f8d342e4ab49": "Sleep",
+  "673139057ce2f8d342e4ab4b": "Anxiety",
+  "6731390f7ce2f8d342e4ab4d": "Stress",
+  "6731391e7ce2f8d342e4ab4f": "Eating disorders",
+  "6731392f7ce2f8d342e4ab51": "Cognitive health",
 };
 
 const validationSchema = Yup.object({
@@ -59,18 +69,15 @@ const CreatePost = () => {
       const areaId = areaEnum[values.area as keyof typeof areaEnum];
 
       try {
-        const response = await axios.post<PostCreateResponse>(
-          `${process.env.NEXT_PUBLIC_API_URL}/posts/`,
-          {
-            title: values.title,
-            description: values.description,
-            body: values.body,
-            area: values.area,
-            areaId: areaId,
-            authorId: userContext.userId,
-            image: "https://i.imgur.com/z2u8xvJ.jpeg",
-          }
-        );
+        const response = await apiClient.post<PostCreateResponse>(`/posts/`, {
+          title: values.title,
+          description: values.description,
+          body: values.body,
+          area: areaEnumReversed[values.area as AreaEnumKeys],
+          areaId: areaId,
+          authorId: userContext.userId,
+          image: "https://i.imgur.com/z2u8xvJ.jpeg",
+        });
 
         if (response.status === 201) {
           enqueueSnackbar("Post created successfully", { variant: "success" });
@@ -95,10 +102,11 @@ const CreatePost = () => {
     <section className="m-8 flex gap-4">
       <div className="w-full lg:w-3/5 mt-24">
         <div className="text-center">
-          // @ts-ignore
+          {/* @ts-ignore */}
           <Typography variant="h2" className="font-bold mb-4">
             Create a Post
           </Typography>
+          {/* @ts-ignore */}
           <Typography
             variant="paragraph"
             color="blue-gray"
@@ -113,6 +121,7 @@ const CreatePost = () => {
         >
           {/* Title Input */}
           <div className="mb-6">
+            {/* @ts-ignore */}
             <Typography
               variant="small"
               color="blue-gray"
@@ -120,6 +129,7 @@ const CreatePost = () => {
             >
               Title
             </Typography>
+            {/* @ts-ignore */}
             <Input
               size="lg"
               placeholder="Post Title"
@@ -140,6 +150,7 @@ const CreatePost = () => {
 
           {/* Description Input */}
           <div className="mb-6">
+            {/* @ts-ignore */}
             <Typography
               variant="small"
               color="blue-gray"
@@ -147,6 +158,7 @@ const CreatePost = () => {
             >
               Description
             </Typography>
+            {/* @ts-ignore */}
             <Input
               size="lg"
               placeholder="Post Description"
@@ -169,6 +181,7 @@ const CreatePost = () => {
 
           {/* Body Input */}
           <div className="mb-6">
+            {/* @ts-ignore */}
             <Typography
               variant="small"
               color="blue-gray"
@@ -176,6 +189,7 @@ const CreatePost = () => {
             >
               Body
             </Typography>
+            {/* @ts-ignore */}
             <Input
               size="lg"
               placeholder="Post Content"
@@ -196,6 +210,7 @@ const CreatePost = () => {
 
           {/* Area Select */}
           <div className="mb-6">
+            {/* @ts-ignore */}
             <Typography
               variant="small"
               color="blue-gray"
@@ -203,6 +218,7 @@ const CreatePost = () => {
             >
               Area
             </Typography>
+            {/* @ts-ignore */}
             <Select
               name="area"
               value={formik.values.area} // Store the areaId here
@@ -219,7 +235,7 @@ const CreatePost = () => {
               }`}
             >
               {Object.keys(areaEnum).map((areaName) => {
-                const areaId = areaEnum[areaName]; // Get the corresponding areaId
+                const areaId = areaEnum[areaName as keyof typeof areaEnum]; // Get the corresponding areaId
                 // console.log(areaId);
                 return (
                   <Option key={areaId} value={areaId}>
@@ -256,6 +272,7 @@ const CreatePost = () => {
           </div>
 
           {/* Submit Button */}
+          {/* @ts-ignore */}
           <Button className="mt-6" fullWidth type="submit">
             Create Post
           </Button>
