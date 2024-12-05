@@ -1,5 +1,5 @@
 "use client";
-import { Avatar, Typography, Button, Input } from "@material-tailwind/react";
+import { Avatar, Typography, Button, Textarea } from "@material-tailwind/react";
 import {
   MapPinIcon,
   GlobeAltIcon,
@@ -13,11 +13,12 @@ import axios from "axios";
 import { useRouter, useParams } from "next/navigation";
 import { Navbar, Footer } from "@/components";
 import { useFormik } from "formik";
-import { TailSpin } from "react-loader-spinner";
 import * as Yup from "yup";
+import { TailSpin } from "react-loader-spinner";
 
 import { useUser } from "@/app/context/userContext";
 import { PostWithComments } from "@/app/types/types";
+import Modal from "@/components/modal";
 // import { Post, PostBackend, Author } from "../types/types";
 // import { Post, PostBackend, Author } from "../../../app/types";
 
@@ -49,7 +50,7 @@ export const initialPostWithComments: PostWithComments = {
   ],
 };
 
-function Profile() {
+function Post() {
   const router = useRouter();
   const params = useParams();
   const id = params?.id;
@@ -59,15 +60,32 @@ function Profile() {
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const { userContext, setUserContext } = useUser();
+  const { userContext } = useUser();
+
+  // Modal utils
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalDescription, setModalDescription] = useState("");
+  const [modalAction, setModalAction] = useState<() => void>(() => {});
+
+  const openModal = (
+    title: string,
+    description: string,
+    action: () => void
+  ) => {
+    setModalTitle(title);
+    setModalDescription(description);
+    setModalAction(() => action);
+    setIsModalOpen(true);
+  };
 
   console.log("Post ID from URL:", id);
   // Function to fetch post data by ID
   const getPostById = async (id: string) => {
     try {
       const response = await axios.get<PostWithComments>(
-        `http://localhost:3000/api/posts/full/${id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/posts/full/${id}`
       );
       setPostData(response.data);
       setLoading(false);
@@ -89,58 +107,76 @@ function Profile() {
     console.log("Current user context:", userContext);
   }, [userContext]);
 
-  // Redirect to /home if no user is found
-  //   useEffect(() => {
-  //     if (!loading && !postData) {
-  //       const timer = setTimeout(() => {
-  //         router.push("/home");
-  //       }, 5000);
+  const formik = useFormik({
+    initialValues: {
+      body: "", // Initial body for the comment
+    },
+    validationSchema: Yup.object({
+      body: Yup.string().required("Comment is required"), // Validation for the comment body
+    }),
+    onSubmit: async (values, { resetForm }) => {
+      if (!values.body.trim()) return; // Prevent submitting empty comments
+      try {
+        // Send the comment to the API
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/comments`,
+          {
+            authorId: userContext.userId,
+            body: values.body,
+            postId: id,
+          }
+        );
 
-  //       return () => clearTimeout(timer); // Clean up the timer
-  //     }
-  //   }, [loading, postData, router]);
+        // Optionally, update the post data with the new comment
+        setPostData((prevPostData) => ({
+          ...prevPostData,
+          comments: [
+            ...prevPostData.comments,
+            {
+              _id: response.data._id,
+              author: {
+                id: response.data.authorId,
+                authorName: response.data.authorName,
+              },
+              body: response.data.body,
+              postId: response.data.postId,
+              createdAt: response.data.createdAt,
+            },
+          ],
+        }));
 
-  // Handle cancel changes
-  const handleCancel = () => {
-    setIsEditing(false); // Exit edit mode
+        // Reset the form after successful submission
+        resetForm();
+      } catch (error) {
+        setError("Error submitting comment");
+      }
+    },
+  });
+
+  const handleDeleteComment = async (commentId: string) => {
+    try {
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/comments/comment/${commentId}`
+      );
+      setPostData({
+        ...postData,
+        comments: postData.comments.filter(
+          (comment) => comment._id !== commentId
+        ),
+      });
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
   };
 
-  // Formik form configuration
-
-  //   const formik = useFormik({
-  //     initialValues: {
-  //       name: userData?.name || "",
-  //       email: userData?.email || "",
-  //       city: userData?.city || "",
-  //       state: userData?.state || "",
-  //       country: userData?.country || "",
-  //       description: userData?.description || "",
-  //       university: userData?.university || "",
-  //       speciality: userData?.speciality || "",
-  //     },
-  //     enableReinitialize: true,
-  //     validationSchema: Yup.object({
-  //       name: Yup.string().required("Name is required"),
-  //       city: Yup.string().optional(),
-  //       state: Yup.string().optional(),
-  //       country: Yup.string().optional(),
-  //       description: Yup.string().optional(),
-  //       university: Yup.string().optional(),
-  //       speciality: Yup.string().optional(),
-  //     }),
-  //     onSubmit: async (values) => {
-  //       try {
-  //         await axios.put(
-  //           `http://localhost:3000/api/users/${userContext.userId}`,
-  //           values
-  //         );
-  //         setUserData({ ...userData, ...values } as User);
-  //         setIsEditing(false);
-  //       } catch (error) {
-  //         console.error("Error updating user data");
-  //       }
-  //     },
-  //   });
+  const handleDeletePost = async (postId: string) => {
+    try {
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/posts/${postId}`);
+      router.push("/"); // Redirect to the home page
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+  };
 
   if (loading) {
     return (
@@ -152,24 +188,11 @@ function Profile() {
 
   if (error) {
     const timer = setTimeout(() => {
-      router.push("/home");
+      router.push("/");
     }, 5000);
 
     return () => clearTimeout(timer);
   }
-
-  //   if (!postData) {
-  //     return (
-  //       <div className="flex flex-col items-center justify-center min-h-screen">
-  //         <Typography variant="h5" color="blue-gray">
-  //           No post found.
-  //         </Typography>
-  //         <Typography color="gray" className="mt-6">
-  //           Redirecting to home in 5 seconds...
-  //         </Typography>
-  //       </div>
-  //     );
-  //   }
 
   return (
     <>
@@ -284,7 +307,18 @@ function Profile() {
               <div className="mt-4 flex gap-4">
                 {/* thats the post author, can delete */}
                 {userContext.userId === postData.author.id && (
-                  <Button onClick={() => {}}>Delete</Button>
+                  <Button
+                    className="bg-black text-white hover:bg-red-500 focus:bg-red-500 active:bg-red-600"
+                    onClick={() =>
+                      openModal(
+                        "Delete Post",
+                        "Are you sure you want to delete this post?",
+                        () => handleDeletePost(id)
+                      )
+                    }
+                  >
+                    Delete
+                  </Button>
                 )}
                 {/* <Button onClick={() => {}}>Delete</Button> */}
                 {/* {isEditing && (
@@ -318,7 +352,7 @@ function Profile() {
                     src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
                     alt={comment.author.id}
                   />
-                  <div>
+                  <div className="flex-grow">
                     <Typography className="font-semibold">
                       {comment.author.authorName}
                     </Typography>
@@ -327,6 +361,22 @@ function Profile() {
                     </Typography>
                     <Typography className="mt-2">{comment.body}</Typography>
                   </div>
+                  {/* Close Button */}
+                  {userContext.userId !== null &&
+                    comment.author.id === userContext.userId && (
+                      <Button
+                        className="bg-black text-white hover:bg-red-500 focus:bg-red-500 active:bg-red-600"
+                        onClick={() =>
+                          openModal(
+                            "Delete Comment",
+                            "Are you sure you want to delete this comment?",
+                            () => handleDeleteComment(comment._id)
+                          )
+                        }
+                      >
+                        Delete Comment
+                      </Button>
+                    )}
                 </div>
               </div>
             ))
@@ -336,11 +386,66 @@ function Profile() {
         </div>
       </section>
 
+      {/* Add Comment Section with Formik */}
+      <section className="bg-white py-6">
+        <div className="container mx-auto">
+          <Typography variant="h6" color="blue-gray" className="mb-2">
+            Add a comment
+          </Typography>
+
+          {/* Only logged in users can post comments */}
+          {userContext.userId === null ? (
+            <Button type="submit" disabled>
+              Login to post a comment
+            </Button>
+          ) : (
+            <form onSubmit={formik.handleSubmit}>
+              <Textarea
+                value={formik.values.body}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                name="body"
+                label="Your comment"
+                rows={3}
+                className="mb-4"
+                error={formik.touched.body && formik.errors.body ? true : false}
+              />
+
+              {formik.touched.body && formik.errors.body && (
+                <Typography color="red" className="mb-4 text-sm">
+                  {formik.errors.body}
+                </Typography>
+              )}
+
+              <Button
+                type="submit"
+                disabled={formik.isSubmitting || !formik.isValid}
+              >
+                {formik.isSubmitting ? "Submitting..." : "Post Comment"}
+              </Button>
+            </form>
+          )}
+        </div>
+      </section>
+
       <div className="bg-white">
         <Footer omitSubscription={true} />
       </div>
+
+      {/* Render Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={modalTitle}
+        description={modalDescription}
+        buttonLabel="Confirm"
+        onButtonClick={() => {
+          modalAction();
+          setIsModalOpen(false); // Close the modal after the action
+        }}
+      />
     </>
   );
 }
 
-export default Profile;
+export default Post;

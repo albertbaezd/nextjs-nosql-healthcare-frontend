@@ -1,4 +1,5 @@
 export interface BlogPostCardProps {
+  postId: string;
   image: string;
   area: string;
   title: string;
