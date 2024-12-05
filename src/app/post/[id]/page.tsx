@@ -15,7 +15,10 @@ import { Navbar, Footer } from "@/components";
 import { useFormik } from "formik";
 import { TailSpin } from "react-loader-spinner";
 import * as Yup from "yup";
+
 import { useUser } from "@/app/context/userContext";
+// import { Post, PostBackend, Author } from "../types/types";
+// import { Post, PostBackend, Author } from "../../../app/types";
 
 interface User {
   id: string;
@@ -43,12 +46,12 @@ function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const { userContext, setUserContext } = useUser();
 
-  console.log("User ID from URL:", id);
+  console.log("Post ID from URL:", id);
   // Function to fetch user data by ID
-  const getUserById = async (id: string) => {
+  const getPostById = async (id: string) => {
     try {
       const response = await axios.get<User>(
-        `http://localhost:3000/api/users/${id}`
+        `http://localhost:3000/api/posts/full/${id}`
       );
       setUserData(response.data); // Set the user data (no type error now)
       setLoading(false);
@@ -61,7 +64,7 @@ function Profile() {
   // Fetch user data when the component is rendered
   useEffect(() => {
     if (id) {
-      getUserById(id); // Call the function with the ID from the URL
+      getPostById(id); // Call the function with the ID from the URL
     }
   }, [id]);
 
@@ -205,7 +208,7 @@ function Profile() {
                       {userData?.email}
                     </Typography>
 
-                    {userData.role == "doctor" && (
+                    {userData.role === "doctor" && (
                       <div className="flex items-center gap-2">
                         <CheckCircleIcon className="-mt-px h-5 w-5 text-blue-500" />
                         <Typography
@@ -313,7 +316,7 @@ function Profile() {
                 <div className="flex items-center gap-2">
                   <BookOpenIcon className="-mt-px h-4 w-4 text-blue-gray-500" />
 
-                  {isEditing && userData.role == "doctor" ? (
+                  {isEditing && userData.role === "doctor" ? (
                     <Input
                       size="lg"
                       placeholder="Speciality"
@@ -365,7 +368,7 @@ function Profile() {
 
               {/* Action Buttons */}
               <div className="mt-4 flex gap-4">
-                {!isEditing && userContext.userId == id && (
+                {!isEditing && userContext.userId === id && (
                   <Button onClick={() => setIsEditing(true)}>Edit</Button>
                 )}
                 {isEditing && (

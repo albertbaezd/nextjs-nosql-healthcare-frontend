@@ -28,7 +28,7 @@ const validationSchema = Yup.object({
     .required("Password is required"),
 });
 
-export function SignIn() {
+function SignIn() {
   const router = useRouter();
   const { userContext, setUserContext } = useUser();
   const { enqueueSnackbar } = useSnackbar();

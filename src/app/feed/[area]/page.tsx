@@ -20,7 +20,7 @@ export type HealthcareAreas =
 export default function Campaign() {
   const { userContext, setUserContext } = useUser();
   const params = useParams();
-  const area: HealthcareAreas = params?.area;
+  const area = params?.area as HealthcareAreas;
 
   //   const currentArea = "anxiety";
   const areaHeroProps = AREA_DETAILS[area].hero;
