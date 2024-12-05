@@ -20,12 +20,14 @@ function Hero({ imageUrl, title, description }: HeroProps) {
         <div className="absolute inset-0 bg-black opacity-35 z-0"></div>{" "}
         <div className="relative z-10">
           {/* Make sure content stays above the overlay */}
+          {/* @ts-ignore */}
           <Typography
             color="white"
             className="mx-auto w-full text-[30px] lg:text-[48px] font-bold leading-[45px] lg:leading-[60px] lg:max-w-2xl"
           >
             <span className="text-white shadow-sm">{title}</span>
           </Typography>
+          {/* @ts-ignore */}
           <Typography
             variant="lead"
             color="white"

@@ -4,11 +4,12 @@ import { SignInRedirect } from "../../components/sign-in-redirect"; // Import th
 import { Input, Checkbox, Button, Typography } from "@material-tailwind/react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
+import apiClient from "@/lib/apiClient";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import { useUser } from "../context/userContext";
+import { setToken } from "@/lib/authToken";
 
 interface userLoginResponse {
   user: {
@@ -50,8 +51,8 @@ function SignIn() {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post<userLoginResponse>(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+        const response = await apiClient.post<userLoginResponse>(
+          `/auth/login`,
           values
         );
 
@@ -75,6 +76,7 @@ function SignIn() {
             university: response.data.user.university,
             speciality: response.data.user.speciality,
           });
+          setToken(response.data.token);
           router.push("/");
         } else {
           enqueueSnackbar(`Login failed, status: ${response.status}`, {

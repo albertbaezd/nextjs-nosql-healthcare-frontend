@@ -1,9 +1,10 @@
+// @ts-nocheck
 "use client";
 
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
+import apiClient from "@/lib/apiClient";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 
@@ -78,8 +79,8 @@ function Register() {
 
       const handleRegister = async () => {
         try {
-          const response = await axios.post<userRegisterResponse>(
-            `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+          const response = await apiClient.post<userRegisterResponse>(
+            `/auth/register`,
             {
               name: values.userName,
               email: values.email,

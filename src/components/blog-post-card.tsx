@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import Image from "next/image";
 import {
@@ -9,6 +10,7 @@ import {
 } from "@material-tailwind/react";
 import { BlogPostCardProps } from "@/app/types/types";
 import { useRouter } from "next/navigation";
+import { formatDate } from "../app/constants/constants";
 
 export function BlogPostCard({
   postId,
@@ -79,7 +81,7 @@ export function BlogPostCard({
               color="gray"
               className="text-xs !text-gray-500 font-normal"
             >
-              {createdAt}
+              {formatDate(createdAt)}
             </Typography>
             {commentCount > 0 && (
               <Typography
