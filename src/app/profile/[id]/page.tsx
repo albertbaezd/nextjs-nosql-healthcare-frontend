@@ -32,7 +32,7 @@ interface User {
   speciality: string;
 }
 
-export function Profile() {
+function Profile() {
   const router = useRouter();
   const params = useParams();
   const id = params?.id;

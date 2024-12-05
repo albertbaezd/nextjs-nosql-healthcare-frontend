@@ -35,7 +35,7 @@ interface User {
   speciality: string;
 }
 
-export function Profile() {
+function Profile() {
   const router = useRouter();
   const params = useParams();
   const id = params?.id;
@@ -208,7 +208,7 @@ export function Profile() {
                       {userData?.email}
                     </Typography>
 
-                    {userData.role == "doctor" && (
+                    {userData.role === "doctor" && (
                       <div className="flex items-center gap-2">
                         <CheckCircleIcon className="-mt-px h-5 w-5 text-blue-500" />
                         <Typography
@@ -316,7 +316,7 @@ export function Profile() {
                 <div className="flex items-center gap-2">
                   <BookOpenIcon className="-mt-px h-4 w-4 text-blue-gray-500" />
 
-                  {isEditing && userData.role == "doctor" ? (
+                  {isEditing && userData.role === "doctor" ? (
                     <Input
                       size="lg"
                       placeholder="Speciality"
@@ -368,7 +368,7 @@ export function Profile() {
 
               {/* Action Buttons */}
               <div className="mt-4 flex gap-4">
-                {!isEditing && userContext.userId == id && (
+                {!isEditing && userContext.userId === id && (
                   <Button onClick={() => setIsEditing(true)}>Edit</Button>
                 )}
                 {isEditing && (

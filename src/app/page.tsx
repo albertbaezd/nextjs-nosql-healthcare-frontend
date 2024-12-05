@@ -17,7 +17,7 @@ export default function Campaign() {
   useEffect(() => {
     // This will run only once after the first render
     console.log("Current user context:", userContext);
-    if (userContext.userId == null) {
+    if (userContext.userId === null) {
       router.push("/login");
     }
   }, []);

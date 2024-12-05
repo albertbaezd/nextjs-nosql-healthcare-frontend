@@ -37,7 +37,7 @@ const validationSchema = Yup.object({
   speciality: Yup.string().optional(),
 });
 
-export function Register() {
+function Register() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalDescription, setModalDescription] = useState("");
   const [modalButtonDescription, setModalButtonDescription] = useState("");
