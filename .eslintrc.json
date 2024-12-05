@@ -1,3 +1,14 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals" // Keeps the Next.js core web vitals rules
+  ],
+  "rules": {
+    // Custom ESLint rules here
+
+    "no-console": "warn", // Show warnings for console statements
+    "no-unused-vars": "warn", // Warn about unused variables
+    "eqeqeq": "warn", // Show error for loose equality checks (==)
+    "no-debugger": "warn", // Warn about debugger statements
+    "react/react-in-jsx-scope": "off" // Disable react-in-jsx-scope if you're using React 17+
+  }
 }

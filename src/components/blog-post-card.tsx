@@ -7,39 +7,43 @@ import {
   CardBody,
   Avatar,
 } from "@material-tailwind/react";
-
-
-interface BlogPostCardProps {
-  img: string;
-  tag: string;
-  title: string;
-  desc: string;
-  author: { name: string; img: string };
-  date: string;
-}
+import { BlogPostCardProps } from "@/app/types/types";
+import { useRouter } from "next/navigation";
 
 export function BlogPostCard({
-  img,
-  tag,
+  postId,
+  image,
+  area,
   title,
-  desc,
-  author,
-  date,
+  description,
+  authorName,
+  createdAt,
+  commentCount,
 }: BlogPostCardProps) {
+  const router = useRouter();
+
+  const handleRedirect = () => {
+    router.push(`/post/${postId}/`);
+  };
+
   return (
-    <Card shadow={true}>
+    <Card
+      shadow={true}
+      className="transition-transform transform hover:scale-105 hover:shadow-lg cursor-pointer"
+      onClick={handleRedirect}
+    >
       <CardHeader>
         <Image
           width={768}
           height={768}
-          src={img}
+          src={image}
           alt={title}
-          className="h-full w-full scale-110 object-cover"
+          className="max-h-[450px] h-[300px] w-full scale-110 object-cover"
         />
       </CardHeader>
       <CardBody className="p-6">
         <Typography variant="small" color="blue" className="mb-2 !font-medium">
-          {tag}
+          {area}
         </Typography>
         <Typography
           as="a"
@@ -48,39 +52,49 @@ export function BlogPostCard({
           color="blue-gray"
           className="mb-2 normal-case transition-colors hover:text-gray-900"
         >
-          {title}
+          {title && title.length > 50 ? title.slice(0, 50) + "..." : title}
         </Typography>
         <Typography className="mb-6 font-normal !text-gray-500">
-          {desc}
+          {description && description.length > 350
+            ? description.slice(0, 350) + "..."
+            : description}
         </Typography>
         <div className="flex items-center gap-4">
-          <Avatar
+          {/* <Avatar
             size="sm"
             variant="circular"
             src={author.img}
             alt={author.name}
-          />
+          /> */}
           <div>
             <Typography
               variant="small"
               color="blue-gray"
               className="mb-0.5 !font-medium"
             >
-              {author.name}
+              {authorName}
             </Typography>
             <Typography
               variant="small"
               color="gray"
               className="text-xs !text-gray-500 font-normal"
             >
-              {date}
+              {createdAt}
             </Typography>
+            {commentCount > 0 && (
+              <Typography
+                variant="small"
+                color="blue-gray"
+                className="mb-0.5 !font-medium"
+              >
+                {commentCount} comments
+              </Typography>
+            )}
           </div>
         </div>
       </CardBody>
     </Card>
   );
 }
-
 
 export default BlogPostCard;
