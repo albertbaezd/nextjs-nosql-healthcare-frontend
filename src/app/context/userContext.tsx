@@ -31,33 +31,58 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  // Step 1: Retrieve user data from localStorage or use default
-  const storedUserContext = JSON.parse(
-    localStorage.getItem("userContext") || "{}"
-  );
+  // Step 1: Retrieve user data from localStorage or use default only on client-side
+  const [isClient, setIsClient] = useState(false);
+  const [userContext, setUserContext] = useState<User>({
+    userId: null,
+    userName: null,
+    userEmail: null,
+    userToken: null,
+    userRole: null,
+    createdAt: null,
+    profilePictureUrl: null,
+    city: null,
+    state: null,
+    country: null,
+    description: null,
+    university: null,
+    speciality: null,
+  });
 
-  const initialState: User = {
-    userId: storedUserContext.userId || null,
-    userName: storedUserContext.userName || null,
-    userEmail: storedUserContext.userEmail || null,
-    userToken: storedUserContext.userToken || null,
-    userRole: storedUserContext.userRole || null,
-    createdAt: storedUserContext.createdAt || null,
-    profilePictureUrl: storedUserContext.profilePictureUrl || null,
-    city: storedUserContext.city || null,
-    state: storedUserContext.state || null,
-    country: storedUserContext.country || null,
-    description: storedUserContext.description || null,
-    university: storedUserContext.university || null,
-    speciality: storedUserContext.speciality || null,
-  };
+  useEffect(() => {
+    setIsClient(true); // Only execute on client side
+  }, []);
 
-  const [userContext, setUserContext] = useState<User>(initialState);
+  useEffect(() => {
+    if (isClient) {
+      const storedUserContext = JSON.parse(
+        localStorage.getItem("userContext") || "{}"
+      );
+      const initialState: User = {
+        userId: storedUserContext.userId || null,
+        userName: storedUserContext.userName || null,
+        userEmail: storedUserContext.userEmail || null,
+        userToken: storedUserContext.userToken || null,
+        userRole: storedUserContext.userRole || null,
+        createdAt: storedUserContext.createdAt || null,
+        profilePictureUrl: storedUserContext.profilePictureUrl || null,
+        city: storedUserContext.city || null,
+        state: storedUserContext.state || null,
+        country: storedUserContext.country || null,
+        description: storedUserContext.description || null,
+        university: storedUserContext.university || null,
+        speciality: storedUserContext.speciality || null,
+      };
+      setUserContext(initialState);
+    }
+  }, [isClient]);
 
   // Step 2: Keep localStorage in sync with userContext
   useEffect(() => {
-    localStorage.setItem("userContext", JSON.stringify(userContext));
-  }, [userContext]);
+    if (isClient) {
+      localStorage.setItem("userContext", JSON.stringify(userContext));
+    }
+  }, [userContext, isClient]);
 
   // Step 3: Logout function to clear user context and localStorage
   const logout = () => {
@@ -76,7 +101,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       university: null,
       speciality: null,
     });
-    localStorage.removeItem("userContext");
+    if (isClient) {
+      localStorage.removeItem("userContext");
+    }
     setToken(null);
   };
 

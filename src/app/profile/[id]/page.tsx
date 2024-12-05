@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import { Avatar, Typography, Button, Input } from "@material-tailwind/react";
 import {

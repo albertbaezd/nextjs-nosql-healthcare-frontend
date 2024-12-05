@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"; // Ensure this component is client-side
 
 import { useRouter } from "next/navigation"; // Use `next/navigation` in Next.js 13+

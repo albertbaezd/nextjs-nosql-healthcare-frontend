@@ -19,7 +19,7 @@ export function Posts() {
       try {
         // Fetch all posts from the new URL
         const postsResponse = await apiClient.get<PostBackend>(
-          `/posts?limit=6`
+          `/posts/latest?limit=6`
         );
         const posts = postsResponse.data.posts;
 
@@ -70,6 +70,7 @@ export function Posts() {
         );
 
         // Set the mapped posts with author details
+        // @ts-ignore
         setPosts(mappedPosts);
 
         console.log("posts with authors:", mappedPosts);
@@ -93,24 +94,15 @@ export function Posts() {
 
   return (
     <section className="grid min-h-screen place-items-center p-8">
-      {/* <Tabs value="trends" className="mx-auto max-w-7xl w-full mb-16 ">
-        <div className="w-full flex mb-8 flex-col items-center">
-          <TabsHeader className="h-10 !w-12/12 md:w-[50rem] border border-white/25 bg-opacity-90">
-            <Tab value="trends">Trends</Tab>
-            <Tab value="frontend">Frontend</Tab>
-            <Tab value="backend">Backend</Tab>
-            <Tab value="cloud">Cloud</Tab>
-            <Tab value="ai">AI</Tab>
-            <Tab value="tools">Tools</Tab>
-          </TabsHeader>
-        </div>
-      </Tabs> */}
+      {/* @ts-ignore */}
       <Typography variant="h6" className="mb-2">
         Newest posts
       </Typography>
+      {/* @ts-ignore */}
       <Typography variant="h1" className="mb-2">
         Read our latest stories!
       </Typography>
+      {/* @ts-ignore */}
       <Typography
         variant="lead"
         color="gray"

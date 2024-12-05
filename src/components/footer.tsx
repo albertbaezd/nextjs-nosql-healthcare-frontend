@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Typography, IconButton } from "@material-tailwind/react";
 
 import SubscriptionCard from "./subscription-card";

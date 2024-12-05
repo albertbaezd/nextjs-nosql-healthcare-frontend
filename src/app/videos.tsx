@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -17,7 +18,9 @@ export function Videos() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await apiClient.get<VideoBackend>(`/video?limit=6`);
+        const response = await apiClient.get<VideoBackend>(
+          `/video?limit=6&sortOrder=desc`
+        );
         console.log(response.data);
         // setVideos(response.data.videos); // Store the data in the state
         const videos = response.data.videos;

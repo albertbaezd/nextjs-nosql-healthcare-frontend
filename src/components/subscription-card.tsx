@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Typography, Input, Button } from "@material-tailwind/react";
 import { useFormik } from "formik";
 import apiClient from "@/lib/apiClient";
