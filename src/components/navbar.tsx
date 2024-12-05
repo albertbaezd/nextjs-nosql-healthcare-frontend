@@ -33,11 +33,11 @@ const NAV_MENU = [
     icon: Bars3Icon, // Icon for Sections
     isDropdown: true,
     dropdownOptions: [
-      { name: "Sleep", route: "/articles/sleep" },
-      { name: "Anxiety", route: "/articles/anxiety" },
-      { name: "Stress", route: "/articles/stress" },
-      { name: "Eating Disorders", route: "/articles/eating-disorders" },
-      { name: "Cognitive Health", route: "/articles/cognitive-health" },
+      { name: "Sleep", route: "/feed/sleep" },
+      { name: "Anxiety", route: "/feed/anxiety" },
+      { name: "Stress", route: "/feed/stress" },
+      { name: "Eating Disorders", route: "/feed/eating-disorders" },
+      { name: "Cognitive Health", route: "/feed/cognitive-health" },
     ],
   },
   {

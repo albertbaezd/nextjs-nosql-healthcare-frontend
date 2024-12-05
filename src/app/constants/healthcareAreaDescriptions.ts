@@ -33,7 +33,7 @@ export const AREA_DETAILS = {
   },
   sleep: {
     hero: {
-      imageUrl: "https://i.imgur.com/sleepImage.jpeg",
+      imageUrl: "https://i.imgur.com/cCP60VB.jpeg",
       title: "Sleep",
       description:
         "Learn how to improve your sleep with expert tips and calming techniques.",
@@ -58,12 +58,12 @@ export const AREA_DETAILS = {
       title: "Latest videos on Sleep",
       description:
         "Find calming videos to help you relax and improve your sleep.",
-      bannerUrl: "https://i.imgur.com/sleepBanner.jpeg",
+      bannerUrl: "https://i.imgur.com/AUiVueS.jpeg",
     },
   },
   stress: {
     hero: {
-      imageUrl: "https://i.imgur.com/stressImage.jpeg",
+      imageUrl: "https://i.imgur.com/B6d7ttv.jpeg",
       title: "Stress",
       description:
         "Manage stress effectively with expert strategies and advice.",
@@ -86,12 +86,12 @@ export const AREA_DETAILS = {
       areaId: AREA_IDS.stressId, // Dynamically use the areaId
       title: "Latest videos on Stress",
       description: "Watch videos with tips on managing and reducing stress.",
-      bannerUrl: "https://i.imgur.com/stressBanner.jpeg",
+      bannerUrl: "https://i.imgur.com/md0fapn.jpeg",
     },
   },
   ["eating-disorders"]: {
     hero: {
-      imageUrl: "https://i.imgur.com/eatingDisorderImage.jpeg",
+      imageUrl: "https://i.imgur.com/LN735E2.jpeg",
       title: "Eating Disorders",
       description:
         "Find help and support for eating disorders with expert guidance.",
@@ -116,12 +116,12 @@ export const AREA_DETAILS = {
       title: "Latest videos on Eating Disorders",
       description:
         "Watch helpful videos on understanding and managing eating disorders.",
-      bannerUrl: "https://i.imgur.com/eatingDisorderBanner.jpeg",
+      bannerUrl: "https://i.imgur.com/t3OUuVv.jpeg",
     },
   },
   ["cognitive-health"]: {
     hero: {
-      imageUrl: "https://i.imgur.com/cognitiveHealthImage.jpeg",
+      imageUrl: "https://i.imgur.com/JvF9Oxk.jpeg",
       title: "Cognitive Health",
       description:
         "Boost your cognitive health with helpful tips and resources.",
@@ -145,7 +145,7 @@ export const AREA_DETAILS = {
       areaId: AREA_IDS.cognitiveHealthId, // Dynamically use the areaId
       title: "Latest videos on Cognitive Health",
       description: "Watch videos focused on improving cognitive health.",
-      bannerUrl: "https://i.imgur.com/cognitiveHealthBanner.jpeg",
+      bannerUrl: "https://i.imgur.com/baKTnA7.jpeg",
     },
   },
 };
