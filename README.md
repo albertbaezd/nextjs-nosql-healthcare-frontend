@@ -1,94 +1,83 @@
-# [NextJS Tailwind Blog Posts Page](http://demos.creative-tim.com/nextjs-tailwind-blog-posts-page?ref=readme-ntbpp) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&logo=twitter)](https://twitter.com/intent/tweet?url=https://www.creative-tim.com/product/nextjs-tailwind-blog-posts-page&text=Check%20Material%20Tailwind%202%20Template%20made%20by%20@CreativeTim%20#webdesign%20#template%20#materialdesign%20#react%20https://www.creative-tim.com/product/nextjs-tailwind-blog-posts-page)
+# Serenity Space
 
-![version](https://img.shields.io/badge/version-1.0.0-blue.svg) [![GitHub issues open](https://img.shields.io/github/issues/creativetimofficial/nextjs-tailwind-blog-posts-page.svg)](https://github.com/creativetimofficial/nextjs-tailwind-blog-posts-page/issues?q=is%3Aopen+is%3Aissue) [![GitHub issues closed](https://img.shields.io/github/issues-closed-raw/creativetimofficial/nextjs-tailwind-blog-posts-page.svg)](https://github.com/creativetimofficial/nextjs-tailwind-blog-posts-page/issues?q=is%3Aissue+is%3Aclosed)
+**Serenity Space** is a mental health-focused platform designed to provide users with helpful resources and a supportive environment. This project integrates a frontend application with a backend system to offer an enriching user experience. It includes a variety of posts, YouTube videos, and community interaction features aimed at raising awareness and fostering conversations about mental well-being.
 
-![Image](https://s3.amazonaws.com/creativetim_bucket/products/746/original/material-tailwind-react-blog-post-template-thumbnail.jpg)
+<img width="1361" alt="image" src="https://github.com/user-attachments/assets/02fdd81a-72fd-4741-b858-bc9046f67ab5">
 
-Introducing Tailwind Blog Post Page, a sleek and user-friendly blog post template built on the foundation of Tailwind CSS and Material Tailwind.
+<img width="1361" alt="image" src="https://github.com/user-attachments/assets/fe55e704-cbdd-44b2-9e6d-68ce95401612">
 
-Are you in need of a professionally designed and highly customizable blog post page template tailored for bloggers, writers, and content creators to present their articles in an engaging and attractive manner? You are in the right place! We are excited to introduce our Free Blog Post Page Template, carefully crafted to cater to the needs of blog developers like you.
+<img width="1361" alt="image" src="https://github.com/user-attachments/assets/e5583a6a-f537-4abd-b6c7-2795c1d9759f">
 
-This template, designed with Tailwind CSS and Material Tailwind, offers effortless customization to align perfectly with your blog's unique branding. The free blog post template comes packed with essential features such as hero image, content section, social media buttons, and comments section.
 
-**Documentation built by Developers**
+## Key Features
 
-Each element is well presented in very complex documentation.
+- **User Registration & Authentication**: Secure sign-up and login features.
+- **Mental Health Resources**: Posts on topics such as stress, anxiety, eating disorders, cognitive health, and sleep.
+- **Engaging Videos**: Curated YouTube videos offering techniques and advice on managing mental health.
+- **User Interaction**: Users can comment on posts and videos, creating a sense of community and support.
+  
+## Topics Covered
 
-You can read more about the [documentation here](https://www.material-tailwind.com/docs/react/installation).
+- **Stress Management**
+- **Anxiety Relief**
+- **Eating Disorders Awareness**
+- **Cognitive Health Tips**
+- **Improving Sleep**
 
-**HELPFUL LINKS**
+## Installation & Setup
 
-- View [Github Repository](https://github.com/creativetimofficial/nextjs-tailwind-blog-posts-page)
-- Check [FAQ Page](https://www.creative-tim.com/faq)
+### Frontend
 
-## [Demo](https://creative-tim.com/product/nextjs-tailwind-blog-posts-page)
+1. Clone the repository:
 
-## Quick start
+   ```bash
+   git clone https://github.com/albertbaezd/nextjs-nosql-healthcare-frontend
+   ```
 
-Quick start options:
+2. Install dependencies:
 
-- Download from [Creative Tim](https://www.creative-tim.com/product/nextjs-tailwind-blog-posts-page?ref=readme-ntbpp).
+   ```bash
+   cd serenity-space/frontend
+   npm install
+   ```
 
-## Terminal Commands
+3. Run the frontend locally:
 
-1. Download and Install NodeJs LTS version from [NodeJs Official Page](https://nodejs.org/en/download/).
-2. Navigate to the root ./ directory of the product and run `npm install` to install our local dependencies.
+   ```bash
+   npm run dev
+   ```
 
-## Documentation
+### Backend
 
-The documentation for the Material Dashboard is hosted at our [website](https://www.material-tailwind.com/docs/react/installation?ref=readme-ntbpp).
+1. Clone the backend repository:
 
-## Browser Support
+   ```bash
+   git clone https://github.com/albertbaezd/nosql-healthcare-project-backend
+   ```
 
-At present, we officially aim to support the last two versions of the following browsers:
+2. Install dependencies:
 
-<img src="https://s3.amazonaws.com/creativetim_bucket/github/browser/chrome.png" width="64" height="64"> <img src="https://s3.amazonaws.com/creativetim_bucket/github/browser/firefox.png" width="64" height="64"> <img src="https://s3.amazonaws.com/creativetim_bucket/github/browser/edge.png" width="64" height="64"> <img src="https://s3.amazonaws.com/creativetim_bucket/github/browser/safari.png" width="64" height="64"> <img src="https://s3.amazonaws.com/creativetim_bucket/github/browser/opera.png" width="64" height="64">
+   ```bash
+   cd serenity-space-backend
+   npm install
+   ```
 
-## Resources
+3. Start the backend server:
 
-- [Live Preview](https://demos.creative-tim.com/nextjs-tailwind-blog-posts-page?ref=readme-ntbpp)
-- [Download Page](https://www.creative-tim.com/product/nextjs-tailwind-blog-posts-page?ref=readme-ntbpp)
-- Documentation is [here](https://www.material-tailwind.com/docs/react/installation?ref=readme-ntbpp)
-- [License Agreement](https://www.creative-tim.com/license?ref=readme-ntbpp)
-- [Support](https://www.creative-tim.com/contact-us?ref=readme-ntbpp)
-- Issues: [Github Issues Page](https://github.com/creativetimofficial/nextjs-tailwind-blog-posts-page/issues)
-- [Nepcha Analytics](https://nepcha.com?ref=readme) - Analytics tool for your website
+   ```bash
+   npm start
+   ```
 
-## Reporting Issues
+## Technologies Used
 
-We use GitHub Issues as the official bug tracker for the Nextjs Tailwind Author Page. Here are some advices for our users that want to report an issue:
+- **Frontend**: Next.js (TypeScript), React
+- **Backend**: Node.js, Express.js, MongoDB
+- **Authentication**: JWT, bcrypt.js
+- **Database**: MongoDB, Atlas for Cloud Hosting
 
-1. Make sure that you are using the latest version of the Nextjs Tailwind Author Page. Check the CHANGELOG from your dashboard on our [website](https://www.creative-tim.com/product/nextjs-tailwind-blog-posts-page?ref=readme-ntbpp).
-2. Providing us reproducible steps for the issue will shorten the time it takes for it to be fixed.
-3. Some issues may be browser specific, so specifying in what browser you encountered the issue might help.
+## License
 
-## Technical Support or Questions
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-If you have questions or need help integrating the product please [contact us](https://www.creative-tim.com/contact-us?ref=readme-ntbpp) instead of opening an issue.
-
-## Licensing
-
-- Copyright 2023 [Creative Tim](https://www.creative-tim.com?ref=readme-ntbpp)
+This project also uses a web template free of use by Creative Tim, which was completely customized to our needs.
 - Creative Tim [license](https://www.creative-tim.com/license?ref=readme-ntbpp)
-
-## Useful Links
-
-- [More products](https://www.creative-tim.com/templates?ref=readme-ntbpp) from Creative Tim
-
-- [Tutorials](https://www.youtube.com/channel/UCVyTG4sCw-rOvB9oHkzZD1w)
-
-- [Freebies](https://www.creative-tim.com/bootstrap-themes/free?ref=readme-ntbpp) from Creative Tim
-
-- [Affiliate Program](https://www.creative-tim.com/affiliates/new?ref=readme-ntbpp) (earn money)
-
-##### Social Media
-
-Twitter: <https://twitter.com/CreativeTim>
-
-Facebook: <https://www.facebook.com/CreativeTim>
-
-Dribbble: <https://dribbble.com/creativetim>
-
-Google+: <https://plus.google.com/+CreativetimPage>
-
-Instagram: <https://instagram.com/creativetimofficial>
