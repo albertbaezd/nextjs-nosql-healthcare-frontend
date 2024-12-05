@@ -46,6 +46,20 @@
    ```bash
    npm run dev
    ```
+The project will run in port 3001 or other in case port 3000 is used for backend.
+
+
+ ### Optional steps (Building)
+
+1. Build the frontend:
+   ```bash
+   npm run dev
+   ```
+
+2. Run the built frontend locally (port 3010 will be used by default):
+   ```bash
+   npm run start
+   ```
 
 ### Backend
 
