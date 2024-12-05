@@ -41,7 +41,7 @@ function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const { userContext, setUserContext } = useUser();
+  const { userContext } = useUser();
 
   console.log("User ID from URL:", id);
   // Function to fetch user data by ID

@@ -13,6 +13,7 @@ import {
   InformationCircleIcon,
   XMarkIcon,
   Bars3Icon,
+  DocumentPlusIcon,
 } from "@heroicons/react/24/solid";
 
 import { useRouter } from "next/navigation"; // Use `next/navigation` in Next.js 13+
@@ -50,6 +51,11 @@ const NAV_MENU = [
     icon: EnvelopeIcon,
     route: "/contact",
   },
+  {
+    name: "Create a post",
+    icon: DocumentPlusIcon,
+    route: "/add-post",
+  },
 ];
 
 interface NavItemProps {
@@ -81,6 +87,10 @@ export function Navbar() {
 
   const handleGoToAccountClick = () => {
     router.push(`/profile/${userContext.userId}`); // Navigate to the "create account" page
+  };
+
+  const handleGoToLogin = () => {
+    router.push("/login"); // Navigate to the "create account" page
   };
 
   const handleNavigation = (route: string) => {
@@ -159,9 +169,15 @@ export function Navbar() {
         {/* Profile */}
         <div className="hidden items-center gap-2 lg:flex">
           <a target="_blank">
-            <Button color="gray" onClick={handleGoToAccountClick}>
-              Profile
-            </Button>
+            {userContext.userId !== null ? (
+              <Button color="gray" onClick={handleGoToAccountClick}>
+                Profile
+              </Button>
+            ) : (
+              <Button color="gray" onClick={handleGoToLogin}>
+                Login
+              </Button>
+            )}
           </a>
         </div>
         <IconButton
@@ -189,9 +205,15 @@ export function Navbar() {
           </ul>
           <div className="mt-6 mb-4 flex items-center gap-2">
             <a target="_blank">
-              <Button color="gray" onClick={handleGoToAccountClick}>
-                Profile
-              </Button>
+              {userContext.userId !== null ? (
+                <Button color="gray" onClick={handleGoToAccountClick}>
+                  Profile
+                </Button>
+              ) : (
+                <Button color="gray" onClick={handleGoToLogin}>
+                  Login
+                </Button>
+              )}
             </a>
           </div>
         </div>

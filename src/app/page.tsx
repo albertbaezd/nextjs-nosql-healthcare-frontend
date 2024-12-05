@@ -10,7 +10,7 @@ import { useUser } from "../app/context/userContext";
 import { useRouter } from "next/navigation";
 
 export default function Campaign() {
-  const { userContext, setUserContext } = useUser();
+  const { userContext } = useUser();
 
   const router = useRouter();
 
