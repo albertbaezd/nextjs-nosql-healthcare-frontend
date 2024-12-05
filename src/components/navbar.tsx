@@ -13,6 +13,7 @@ import {
   InformationCircleIcon,
   XMarkIcon,
   Bars3Icon,
+  DocumentPlusIcon,
 } from "@heroicons/react/24/solid";
 
 import { useRouter } from "next/navigation"; // Use `next/navigation` in Next.js 13+
@@ -46,27 +47,30 @@ const NAV_MENU = [
     route: "/about",
   },
   {
-    name: "Contact",
-    icon: EnvelopeIcon,
-    route: "/contact",
+    name: "Create a post",
+    icon: DocumentPlusIcon,
+    route: "/add-post",
   },
 ];
 
 interface NavItemProps {
   children: React.ReactNode;
   href?: string;
+  onClick?: () => void;
 }
 
-function NavItem({ children, href }: NavItemProps) {
+function NavItem({ children, href, onClick }: NavItemProps) {
   return (
     <li>
       <Typography
         as="a"
-        href={href || "#"}
-        target={href ? "_blank" : "_self"}
+        // href={href || "#"}
+        href={href}
+        // target={href ? "_blank" : "_self"}
+        onClick={onClick}
         variant="paragraph"
         color="gray"
-        className="flex items-center gap-2 font-medium text-gray-900"
+        className="flex items-center gap-2 font-medium text-gray-900 cursor-pointer"
       >
         {children}
       </Typography>
@@ -81,6 +85,10 @@ export function Navbar() {
 
   const handleGoToAccountClick = () => {
     router.push(`/profile/${userContext.userId}`); // Navigate to the "create account" page
+  };
+
+  const handleGoToLogin = () => {
+    router.push("/login"); // Navigate to the "create account" page
   };
 
   const handleNavigation = (route: string) => {
@@ -118,50 +126,77 @@ export function Navbar() {
 
         <ul className="ml-10 hidden items-center gap-8 lg:flex">
           {NAV_MENU.map(
-            ({ name, icon: Icon, href, isDropdown, dropdownOptions }) => (
-              <li className="relative group" key={name}>
-                {isDropdown ? (
-                  <>
-                    <div className="relative group">
-                      <div className="flex items-center space-x-2 cursor-pointer text-black">
-                        <Icon className="h-5 w-5" />
-                        <span>{name}</span>
-                      </div>
-
-                      {/* Dropdown menu */}
-                      <div className="absolute left-0 hidden mt-2 w-40 bg-white rounded-md shadow-lg group-hover:flex flex-col top-[10px] pt-2.5 px-2.5">
-                        <ul className="py-1">
-                          {dropdownOptions.map((option) => (
-                            <NavItem key={option.name}>
-                              <span
-                                className="pt-2.5"
-                                onClick={() => handleNavigation(option.route)}
-                              >
-                                {option.name}
-                              </span>
-                            </NavItem>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <NavItem key={name} href={href}>
+            ({ name, icon: Icon, route, isDropdown, dropdownOptions }) => {
+              // Check if the nav item is "Create a post" and if the user is not a doctor
+              if (
+                name === "Create a post" &&
+                userContext.userRole !== "doctor"
+              ) {
+                return null; // Don't render the item
+              }
+              if (name === "About us") {
+                return (
+                  <NavItem
+                    key={name}
+                    href="https://github.com/albertbaezd/nosql-healthcare-project-backend"
+                  >
                     <Icon className="h-5 w-5" />
-                    {name}
+                    <span>{name}</span>
                   </NavItem>
-                )}
-              </li>
-            )
+                ); // Don't render the item
+              }
+
+              return (
+                <li className="relative group" key={name}>
+                  {isDropdown ? (
+                    <>
+                      <div className="relative group">
+                        <div className="flex items-center space-x-2 cursor-pointer text-black">
+                          <Icon className="h-5 w-5" />
+                          <span>{name}</span>
+                        </div>
+
+                        {/* Dropdown menu */}
+                        <div className="absolute left-0 hidden mt-2 w-40 bg-white rounded-md shadow-lg group-hover:flex flex-col top-[10px] pt-2.5 px-2.5">
+                          <ul className="py-1">
+                            {dropdownOptions.map((option) => (
+                              <NavItem key={option.name}>
+                                <span
+                                  className="pt-2.5"
+                                  onClick={() => handleNavigation(option.route)}
+                                >
+                                  {option.name}
+                                </span>
+                              </NavItem>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <NavItem key={name} onClick={() => handleNavigation(route)}>
+                      <Icon className="h-5 w-5" />
+                      <span>{name}</span>
+                    </NavItem>
+                  )}
+                </li>
+              );
+            }
           )}
         </ul>
 
         {/* Profile */}
         <div className="hidden items-center gap-2 lg:flex">
           <a target="_blank">
-            <Button color="gray" onClick={handleGoToAccountClick}>
-              Profile
-            </Button>
+            {userContext.userId !== null ? (
+              <Button color="gray" onClick={handleGoToAccountClick}>
+                Profile
+              </Button>
+            ) : (
+              <Button color="gray" onClick={handleGoToLogin}>
+                Login
+              </Button>
+            )}
           </a>
         </div>
         <IconButton
@@ -189,9 +224,15 @@ export function Navbar() {
           </ul>
           <div className="mt-6 mb-4 flex items-center gap-2">
             <a target="_blank">
-              <Button color="gray" onClick={handleGoToAccountClick}>
-                Profile
-              </Button>
+              {userContext.userId !== null ? (
+                <Button color="gray" onClick={handleGoToAccountClick}>
+                  Profile
+                </Button>
+              ) : (
+                <Button color="gray" onClick={handleGoToLogin}>
+                  Login
+                </Button>
+              )}
             </a>
           </div>
         </div>

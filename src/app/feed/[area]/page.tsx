@@ -18,7 +18,7 @@ export type HealthcareAreas =
   | "cognitive-health";
 
 export default function Campaign() {
-  const { userContext, setUserContext } = useUser();
+  const { userContext } = useUser();
   const params = useParams();
   const area = params?.area as HealthcareAreas;
 

@@ -8,8 +8,10 @@ import {
   Avatar,
 } from "@material-tailwind/react";
 import { BlogPostCardProps } from "@/app/types/types";
+import { useRouter } from "next/navigation";
 
 export function BlogPostCard({
+  postId,
   image,
   area,
   title,
@@ -18,10 +20,17 @@ export function BlogPostCard({
   createdAt,
   commentCount,
 }: BlogPostCardProps) {
+  const router = useRouter();
+
+  const handleRedirect = () => {
+    router.push(`/post/${postId}/`);
+  };
+
   return (
     <Card
       shadow={true}
       className="transition-transform transform hover:scale-105 hover:shadow-lg cursor-pointer"
+      onClick={handleRedirect}
     >
       <CardHeader>
         <Image

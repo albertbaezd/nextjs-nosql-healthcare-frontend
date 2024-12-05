@@ -41,14 +41,14 @@ function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const { userContext, setUserContext } = useUser();
+  const { userContext } = useUser();
 
   console.log("User ID from URL:", id);
   // Function to fetch user data by ID
   const getUserById = async (id: string) => {
     try {
       const response = await axios.get<User>(
-        `http://localhost:3000/api/users/${id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/users/${id}`
       );
       setUserData(response.data); // Set the user data (no type error now)
       setLoading(false);
@@ -62,6 +62,9 @@ function Profile() {
   useEffect(() => {
     if (id) {
       getUserById(id); // Call the function with the ID from the URL
+    } else {
+      console.log("There's not a profile ID specified");
+      router.push("/login");
     }
   }, [id]);
 
@@ -74,7 +77,7 @@ function Profile() {
   useEffect(() => {
     if (!loading && !userData) {
       const timer = setTimeout(() => {
-        router.push("/home");
+        router.push("/");
       }, 5000);
 
       return () => clearTimeout(timer); // Clean up the timer
@@ -111,7 +114,7 @@ function Profile() {
     onSubmit: async (values) => {
       try {
         await axios.put(
-          `http://localhost:3000/api/users/${userContext.userId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/users/${userContext.userId}`,
           values
         );
         setUserData({ ...userData, ...values } as User);

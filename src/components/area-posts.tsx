@@ -62,7 +62,7 @@ export function AreaPosts({
               const author = authorResponse.data;
 
               return {
-                id: post.id,
+                id: post._id,
                 image: post.image,
                 area: post.area,
                 title: post.title,
@@ -97,6 +97,7 @@ export function AreaPosts({
           })
         );
 
+        console.log("posts after mapping", mappedPosts);
         // Append new posts to the existing list of posts
         setPosts((prevPosts) => [...prevPosts, ...mappedPosts]);
         setLoading(false);
@@ -147,6 +148,7 @@ export function AreaPosts({
               commentCount,
             }) => (
               <BlogPostCard
+                postId={id}
                 key={id}
                 image={image}
                 area={area}

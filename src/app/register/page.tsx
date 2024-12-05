@@ -13,9 +13,18 @@ import { useUser } from "../context/userContext";
 
 interface userRegisterResponse {
   user: {
-    id: string;
+    _id: string;
     name: string;
     email: string;
+    role: string;
+    createdAt?: string;
+    profilePictureUrl?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    description?: string;
+    university?: string;
+    speciality?: string;
   };
   token: string;
 }
@@ -92,10 +101,19 @@ function Register() {
 
             // Updating global user context
             setUserContext({
-              userId: response.data.user.id,
+              userId: response.data.user._id,
               userName: response.data.user.name,
               userEmail: response.data.user.email,
               userToken: response.data.token,
+              userRole: response.data.user.role,
+              createdAt: response.data.user.createdAt,
+              profilePictureUrl: response.data.user.profilePictureUrl,
+              city: response.data.user.city,
+              state: response.data.user.state,
+              country: response.data.user.country,
+              description: response.data.user.description,
+              university: response.data.user.university,
+              speciality: response.data.user.speciality,
             });
           } else {
             enqueueSnackbar(`Registration failed, status: ${response.status}`, {

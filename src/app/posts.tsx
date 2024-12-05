@@ -137,7 +137,7 @@ export function Posts() {
 
               // Return the post with the updated author information
               return {
-                id: post.id,
+                id: post._id,
                 image: post.image,
                 area: post.area,
                 title: post.title,
@@ -230,6 +230,7 @@ export function Posts() {
           {posts.map(
             ({ id, image, area, title, description, author, createdAt }) => (
               <BlogPostCard
+                postId={id}
                 key={id}
                 image={image}
                 area={area}
