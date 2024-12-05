@@ -47,11 +47,6 @@ const NAV_MENU = [
     route: "/about",
   },
   {
-    name: "Contact",
-    icon: EnvelopeIcon,
-    route: "/contact",
-  },
-  {
     name: "Create a post",
     icon: DocumentPlusIcon,
     route: "/add-post",
@@ -70,6 +65,7 @@ function NavItem({ children, href, onClick }: NavItemProps) {
       <Typography
         as="a"
         // href={href || "#"}
+        href={href}
         // target={href ? "_blank" : "_self"}
         onClick={onClick}
         variant="paragraph"
@@ -137,6 +133,17 @@ export function Navbar() {
                 userContext.userRole !== "doctor"
               ) {
                 return null; // Don't render the item
+              }
+              if (name === "About us") {
+                return (
+                  <NavItem
+                    key={name}
+                    href="https://github.com/albertbaezd/nosql-healthcare-project-backend"
+                  >
+                    <Icon className="h-5 w-5" />
+                    <span>{name}</span>
+                  </NavItem>
+                ); // Don't render the item
               }
 
               return (
