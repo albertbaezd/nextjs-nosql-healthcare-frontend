@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
@@ -45,7 +45,7 @@ const validationSchema = Yup.object({
 const CreatePost = () => {
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
-  const { userContext, setUserContext } = useUser();
+  const { userContext } = useUser();
 
   const formik = useFormik({
     initialValues: {
@@ -56,7 +56,7 @@ const CreatePost = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
-      const areaId = areaEnum[values.area];
+      const areaId = areaEnum[values.area as keyof typeof areaEnum];
 
       try {
         const response = await axios.post<PostCreateResponse>(
@@ -95,6 +95,7 @@ const CreatePost = () => {
     <section className="m-8 flex gap-4">
       <div className="w-full lg:w-3/5 mt-24">
         <div className="text-center">
+          // @ts-ignore
           <Typography variant="h2" className="font-bold mb-4">
             Create a Post
           </Typography>

@@ -22,7 +22,7 @@ import Modal from "@/components/modal";
 // import { Post, PostBackend, Author } from "../types/types";
 // import { Post, PostBackend, Author } from "../../../app/types";
 
-export const initialPostWithComments: PostWithComments = {
+const initialPostWithComments: PostWithComments = {
   id: "",
   image: "",
   area: "",
