@@ -62,15 +62,14 @@ export function Posts() {
 
   return (
     <section className="grid min-h-screen place-items-center p-8">
-      {/* @ts-ignore */}
       <Typography variant="h6" className="mb-2">
         Newest posts
       </Typography>
-      {/* @ts-ignore */}
+
       <Typography variant="h1" className="mb-2">
         Read our latest stories!
       </Typography>
-      {/* @ts-ignore */}
+
       <Typography
         variant="lead"
         color="gray"

@@ -123,25 +123,25 @@ function Post() {
 
         // Optionally, update the post data with the new comment
 
-        // @ts-ignore
+        //
         setPostData((prevPostData) => ({
           ...prevPostData,
           comments: [
             ...prevPostData.comments,
             {
-              // @ts-ignore
+              //
               _id: response.data._id,
               author: {
-                // @ts-ignore
+                //
                 id: response.data.authorId,
-                // @ts-ignore
+                //
                 authorName: response.data.authorName,
               },
-              // @ts-ignore
+              //
               body: response.data.body,
-              // @ts-ignore
+              //
               postId: response.data.postId,
-              // @ts-ignore
+              //
               createdAt: response.data.createdAt,
             },
           ],
@@ -160,7 +160,7 @@ function Post() {
       await apiClient.delete(`/comments/comment/${commentId}`);
       setPostData({
         ...postData,
-        // @ts-ignore
+        //
         comments: postData.comments.filter(
           (comment) => comment._id !== commentId
         ),
@@ -215,11 +215,10 @@ function Post() {
               <div className="flex flex-col lg:flex-row justify-between">
                 <div className="relative flex gap-6 items-start mb-10">
                   <div className="flex flex-col mt-2">
-                    {/* @ts-ignore */}
                     <Typography variant="h4" color="blue-gray">
                       {postData.title}
                     </Typography>
-                    {/* @ts-ignore */}
+
                     <Typography
                       variant="paragraph"
                       color="gray"
@@ -239,7 +238,7 @@ function Post() {
 
                     <div className="flex items-center gap-2">
                       <CheckCircleIcon className="-mt-px h-5 w-5 text-blue-500" />
-                      {/* @ts-ignore */}
+
                       <Typography
                         variant="paragraph"
                         color="gray"
@@ -256,7 +255,6 @@ function Post() {
                   {/* <ClockIcon className="-mt-px h-4 w-4 text-blue-gray-500" /> */}
                   <ClockIcon className="-mt-px h-4 w-4 text-blue-gray-500" />
                   <div className="flex w-full gap-2">
-                    {/* @ts-ignore */}
                     <Typography className="font-medium text-blue-gray-500">
                       {formatDate(postData.createdAt)}
                       {/* postData.createdAt */}
@@ -265,7 +263,7 @@ function Post() {
                 </div>
                 <div className="flex items-center gap-2">
                   <BookOpenIcon className="-mt-px h-4 w-4 text-blue-gray-500" />
-                  {/* @ts-ignore */}
+
                   <Typography className="font-medium text-blue-gray-500">
                     {postData.area}
                   </Typography>
@@ -297,11 +295,10 @@ function Post() {
               </div>
               <div className="mb-10 py-6">
                 <div className="flex w-full flex-col items-start">
-                  {/* @ts-ignore */}
                   <Typography className="mb-2 font-normal text-black-800">
                     Weldome to this article:
                   </Typography>
-                  {/* @ts-ignore */}
+
                   <Typography className="font-medium text-blue-gray-500">
                     {postData.description ||
                       "Description missing... Hmmm... Would you like to share something interesting?"}
@@ -313,7 +310,7 @@ function Post() {
               <div className="mt-4 flex gap-4">
                 {/* thats the post author, can delete */}
                 {userContext.userId === postData.author.id && (
-                  // @ts-ignore
+                  //
                   <Button
                     className="bg-black text-white hover:bg-red-500 focus:bg-red-500 active:bg-red-600"
                     onClick={() =>
@@ -347,7 +344,6 @@ function Post() {
       {/* Comments Section */}
       <section className="bg-gray-50 py-10">
         <div className="container mx-auto space-y-6">
-          {/* @ts-ignore */}
           <Typography variant="h5" color="blue-gray">
             {postData.comments.length} comments
           </Typography>
@@ -356,27 +352,25 @@ function Post() {
             postData.comments.map((comment) => (
               <div key={comment._id} className="border-b py-4">
                 <div className="flex items-start gap-4">
-                  {/* @ts-ignore */}
                   <Avatar
                     src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
                     alt={comment.author.id}
                   />
                   <div className="flex-grow">
-                    {/* @ts-ignore */}
                     <Typography className="font-semibold">
                       {comment.author.authorName}
                     </Typography>
-                    {/* @ts-ignore */}
+
                     <Typography className="text-gray-500">
                       {new Date(comment.createdAt).toLocaleString()}
                     </Typography>
-                    {/* @ts-ignore */}
+
                     <Typography className="mt-2">{comment.body}</Typography>
                   </div>
                   {/* Close Button */}
                   {userContext.userId !== null &&
                     comment.author.id === userContext.userId && (
-                      // @ts-ignore
+                      //
                       <Button
                         className="bg-black text-white hover:bg-red-500 focus:bg-red-500 active:bg-red-600"
                         onClick={() =>
@@ -394,7 +388,7 @@ function Post() {
               </div>
             ))
           ) : (
-            // @ts-ignore
+            //
             <Typography color="gray">No comments yet.</Typography>
           )}
         </div>
@@ -403,20 +397,18 @@ function Post() {
       {/* Add Comment Section with Formik */}
       <section className="bg-white py-6">
         <div className="container mx-auto">
-          {/* @ts-ignore */}
           <Typography variant="h6" color="blue-gray" className="mb-2">
             Add a comment
           </Typography>
 
           {/* Only logged in users can post comments */}
           {userContext.userId === null ? (
-            // @ts-ignore
+            //
             <Button type="submit" disabled>
               Login to post a comment
             </Button>
           ) : (
             <form onSubmit={formik.handleSubmit}>
-              {/* @ts-ignore */}
               <Textarea
                 value={formik.values.body}
                 onChange={formik.handleChange}
@@ -429,12 +421,12 @@ function Post() {
               />
 
               {formik.touched.body && formik.errors.body && (
-                // @ts-ignore
+                //
                 <Typography color="red" className="mb-4 text-sm">
                   {formik.errors.body}
                 </Typography>
               )}
-              {/* @ts-ignore */}
+
               <Button
                 type="submit"
                 disabled={formik.isSubmitting || !formik.isValid}
