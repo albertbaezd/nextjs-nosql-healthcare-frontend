@@ -52,12 +52,14 @@ export interface PostWithComments {
 }
 
 export interface PostBackend {
+  id: string;
   page: number;
   limitOrTotal: number;
   totalPages: number;
   totalPosts: number;
   posts: [
     {
+      _id: string;
       image: string;
       area: string;
       title: string;
