@@ -71,7 +71,7 @@ export function Videos() {
       </Typography>
       <Typography
         variant="lead"
-        className="my-2 w-full font-normal !text-gray-500 "
+        className="my-2 w-full font-normal !text-gray-500"
       >
         Check out our latest selection of recommended videos and materials to
         boost your experience on assorted topics!
