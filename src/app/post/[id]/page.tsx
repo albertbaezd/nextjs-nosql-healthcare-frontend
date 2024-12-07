@@ -47,6 +47,15 @@ const initialPostWithComments: PostWithComments = {
   ],
 };
 
+interface CommentResponse {
+  _id: string;
+  authorId: string;
+  authorName: string;
+  body: string;
+  postId: string;
+  createdAt: string;
+}
+
 function Post() {
   const router = useRouter();
   const params = useParams();
@@ -115,37 +124,29 @@ function Post() {
       if (!values.body.trim()) return; // Prevent submitting empty comments
       try {
         // Send the comment to the API
-        const response = await apiClient.post(`/comments`, {
+        const response = await apiClient.post<CommentResponse>(`/comments`, {
           authorId: userContext.userId,
           body: values.body,
           postId: id,
         });
 
-        // Optionally, update the post data with the new comment
-
-        //
-        setPostData((prevPostData) => ({
-          ...prevPostData,
-          comments: [
-            ...prevPostData.comments,
-            {
-              //
-              _id: response.data._id,
-              author: {
-                //
-                id: response.data.authorId,
-                //
-                authorName: response.data.authorName,
-              },
-              //
-              body: response.data.body,
-              //
-              postId: response.data.postId,
-              //
-              createdAt: response.data.createdAt,
+        setPostData((prevPostData) => {
+          const newComment = {
+            _id: response.data._id,
+            author: {
+              id: response.data.authorId,
+              authorName: response.data.authorName,
             },
-          ],
-        }));
+            body: response.data.body,
+            postId: response.data.postId,
+            createdAt: response.data.createdAt,
+          };
+
+          return {
+            ...prevPostData,
+            comments: [...prevPostData.comments, newComment], // Append the new comment
+          };
+        });
 
         // Reset the form after successful submission
         resetForm();
