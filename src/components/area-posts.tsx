@@ -8,7 +8,7 @@ import BlogPostCard from "@/components/blog-post-card";
 
 import apiClient from "@/lib/apiClient";
 
-import { Post, PostBackend, Author } from "../app/types/types";
+import { Post, PostBackend, AreaPost } from "../app/types/types";
 import { formatDate } from "../app/constants/constants";
 import { TailSpin } from "react-loader-spinner";
 
@@ -16,6 +16,7 @@ import { TailSpin } from "react-loader-spinner";
 interface AreaPostsProps {
   areaId: string; // or number, depending on your use case
   title: string;
+  subTitle: string;
   description: string;
   mostPopular?: boolean;
 }
@@ -24,6 +25,7 @@ interface AreaPostsProps {
 export function AreaPosts({
   areaId,
   title,
+  subTitle,
   description,
   mostPopular,
 }: AreaPostsProps) {
@@ -45,62 +47,76 @@ export function AreaPosts({
           : `/posts/area/${areaId}?limit=6&page=${page}`;
 
         const postsResponse = await apiClient.get<PostBackend>(url);
-        const posts: any[] = postsResponse.data.posts;
+        const posts: AreaPost[] = postsResponse.data.posts;
 
         // If no posts were returned, stop further requests
-        console.log("posts", postsResponse);
+        console.log("posts backend", postsResponse);
         if (posts.length === 0) {
           setHasMore(false);
         }
 
+        const formattedPosts = posts.map((post) => ({
+          id: post._id,
+          image: post.image,
+          area: post.area,
+          title: post.title,
+          description: post.description,
+          author: {
+            name: post.author.name,
+            id: post.author.id,
+            profilePicture: post.author.profilePicture || "",
+          },
+          createdAt: formatDate(post.createdAt),
+          commentCount: post.commentCount || 0,
+        }));
         // Fetch the authors for each post
-        const mappedPosts = await Promise.all(
-          posts.map(async (post: any) => {
-            try {
-              const authorResponse = await apiClient.get<Author>(
-                `/users/${post.authorId}`
-              );
-              const author = authorResponse.data;
+        // const mappedPosts = await Promise.all(
+        //   posts.map(async (post: any) => {
+        //     try {
+        //       const authorResponse = await apiClient.get<Author>(
+        //         `/users/${post.authorId}`
+        //       );
+        //       const author = authorResponse.data;
 
-              return {
-                id: post._id,
-                image: post.image,
-                area: post.area,
-                title: post.title,
-                description: post.description,
-                author: {
-                  name: author.name,
-                  id: post.authorId,
-                  profilePicture: author.profilePicture || "",
-                },
-                createdAt: formatDate(post.createdAt),
-                commentCount: post.commentCount || 0,
-              };
-            } catch (error) {
-              console.error(
-                `Error fetching author for post ${post.title}:`,
-                error
-              );
-              return {
-                image: post.image,
-                area: post.area,
-                title: post.title,
-                description: post.description,
-                author: {
-                  name: "Unknown",
-                  id: post.authorId,
-                  profilePicture: "",
-                },
-                createdAt: post.createdAt,
-                commentCount: post.commentCount || 0,
-              };
-            }
-          })
-        );
+        //       return {
+        //         id: post._id,
+        //         image: post.image,
+        //         area: post.area,
+        //         title: post.title,
+        //         description: post.description,
+        //         author: {
+        //           name: author.name,
+        //           id: post.authorId,
+        //           profilePicture: author.profilePicture || "",
+        //         },
+        //         createdAt: formatDate(post.createdAt),
+        //         commentCount: post.commentCount || 0,
+        //       };
+        //     } catch (error) {
+        //       console.error(
+        //         `Error fetching author for post ${post.title}:`,
+        //         error
+        //       );
+        //       return {
+        //         image: post.image,
+        //         area: post.area,
+        //         title: post.title,
+        //         description: post.description,
+        //         author: {
+        //           name: "Unknown",
+        //           id: post.authorId,
+        //           profilePicture: "",
+        //         },
+        //         createdAt: post.createdAt,
+        //         commentCount: post.commentCount || 0,
+        //       };
+        //     }
+        //   })
+        // );
 
-        console.log("posts after mapping", mappedPosts);
+        // console.log("posts after mapping", mappedPosts);
         // Append new posts to the existing list of posts
-        setPosts((prevPosts) => [...prevPosts, ...mappedPosts]);
+        setPosts((prevPosts) => [...prevPosts, ...formattedPosts]);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching posts:", error);
@@ -119,7 +135,7 @@ export function AreaPosts({
   return (
     <section className="grid min-h-screen place-items-center p-8">
       <Typography variant="h6" className="mb-2">
-        Newest posts
+        {subTitle}
       </Typography>
       <Typography variant="h1" className="mb-2">
         {title}
