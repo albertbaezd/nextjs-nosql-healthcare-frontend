@@ -23,6 +23,18 @@ export interface Post {
   createdAt: string;
   commentCount?: number;
 }
+
+interface Comment {
+  _id: string;
+  author: {
+    id: string;
+    authorName: string;
+  };
+  body: string;
+  postId: string;
+  createdAt: string;
+}
+
 export interface PostWithComments {
   id: string;
   image: string;
@@ -37,27 +49,18 @@ export interface PostWithComments {
   };
   createdAt: string;
   commentCount?: number;
-  comments: [
-    {
-      _id: string; // Unique ID for the comment
-      author: {
-        id: string;
-        authorName: string;
-      };
-      body: string; // Content of the comment
-      postId: string; // ID of the post this comment is associated with
-      createdAt: string; // Timestamp of when the comment was created
-    }
-  ];
+  comments: Comment[];
 }
 
 export interface PostBackend {
+  id: string;
   page: number;
   limitOrTotal: number;
   totalPages: number;
   totalPosts: number;
   posts: [
     {
+      _id: string;
       image: string;
       area: string;
       title: string;
