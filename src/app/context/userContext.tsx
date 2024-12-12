@@ -31,6 +31,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  console.log("UserProvider is being applied"); // Debugging
   // Step 1: Retrieve user data from localStorage or use default only on client-side
   const [isClient, setIsClient] = useState(false);
   const [userContext, setUserContext] = useState<User>({

@@ -14,13 +14,13 @@ export default function Campaign() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    // This will run only once after the first render
-    console.log("Current user context:", userContext);
-    if (userContext.userId === null) {
-      router.push("/login");
-    }
-  }, []);
+  // useEffect(() => {
+  //   // This will run only once after the first render
+  //   console.log("Current user context:", userContext);
+  //   if (userContext.userId === null) {
+  //     router.push("/login");
+  //   }
+  // }, []);
 
   return (
     <>

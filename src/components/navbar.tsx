@@ -58,9 +58,10 @@ interface NavItemProps {
   children: React.ReactNode;
   href?: string;
   onClick?: () => void;
+  target?: string;
 }
 
-function NavItem({ children, href, onClick }: NavItemProps) {
+function NavItem({ children, href, onClick, target }: NavItemProps) {
   return (
     <li>
       <Typography
@@ -71,6 +72,7 @@ function NavItem({ children, href, onClick }: NavItemProps) {
         onClick={onClick}
         variant="paragraph"
         color="gray"
+        target={target}
         className="flex items-center gap-2 font-medium text-gray-900 cursor-pointer"
       >
         {children}
@@ -145,6 +147,7 @@ export function Navbar() {
                   <NavItem
                     key={name}
                     href="https://github.com/albertbaezd/nosql-healthcare-project-backend"
+                    target="_blank"
                   >
                     <Icon className="h-5 w-5" />
                     <span>{name}</span>

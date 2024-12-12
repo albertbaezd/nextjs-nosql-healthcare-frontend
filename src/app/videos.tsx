@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -10,6 +9,7 @@ import { Typography } from "@material-tailwind/react";
 import VideoCard from "@/components/video-card";
 
 import { Video, VideoBackend } from "./types/types";
+import { TailSpin } from "react-loader-spinner";
 
 export function Videos() {
   const [videos, setVideos] = useState<Video[]>([]); // State to store fetched data
@@ -49,13 +49,9 @@ export function Videos() {
 
   if (loading) {
     return (
-      <Typography
-        variant="lead"
-        color="gray"
-        className="max-w-3xl mb-36 text-center text-gray-500"
-      >
-        Loading videos...
-      </Typography>
+      <div className="flex justify-center items-center min-h-screen">
+        <TailSpin height="80" width="80" color="gray" ariaLabel="loading" />
+      </div>
     );
   }
 
@@ -75,7 +71,7 @@ export function Videos() {
       </Typography>
       <Typography
         variant="lead"
-        className="my-2 w-full font-normal !text-gray-500 "
+        className="my-2 w-full font-normal !text-gray-500"
       >
         Check out our latest selection of recommended videos and materials to
         boost your experience on assorted topics!

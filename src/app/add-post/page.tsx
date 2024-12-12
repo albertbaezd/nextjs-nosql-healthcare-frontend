@@ -102,11 +102,10 @@ const CreatePost = () => {
     <section className="m-8 flex gap-4">
       <div className="w-full lg:w-3/5 mt-24">
         <div className="text-center">
-          {/* @ts-ignore */}
           <Typography variant="h2" className="font-bold mb-4">
             Create a Post
           </Typography>
-          {/* @ts-ignore */}
+
           <Typography
             variant="paragraph"
             color="blue-gray"
@@ -121,7 +120,6 @@ const CreatePost = () => {
         >
           {/* Title Input */}
           <div className="mb-6">
-            {/* @ts-ignore */}
             <Typography
               variant="small"
               color="blue-gray"
@@ -129,8 +127,9 @@ const CreatePost = () => {
             >
               Title
             </Typography>
-            {/* @ts-ignore */}
+
             <Input
+              crossOrigin=""
               size="lg"
               placeholder="Post Title"
               name="title"
@@ -150,7 +149,6 @@ const CreatePost = () => {
 
           {/* Description Input */}
           <div className="mb-6">
-            {/* @ts-ignore */}
             <Typography
               variant="small"
               color="blue-gray"
@@ -158,8 +156,9 @@ const CreatePost = () => {
             >
               Description
             </Typography>
-            {/* @ts-ignore */}
+
             <Input
+              crossOrigin=""
               size="lg"
               placeholder="Post Description"
               name="description"
@@ -181,7 +180,6 @@ const CreatePost = () => {
 
           {/* Body Input */}
           <div className="mb-6">
-            {/* @ts-ignore */}
             <Typography
               variant="small"
               color="blue-gray"
@@ -189,8 +187,9 @@ const CreatePost = () => {
             >
               Body
             </Typography>
-            {/* @ts-ignore */}
+
             <Input
+              crossOrigin=""
               size="lg"
               placeholder="Post Content"
               name="body"
@@ -210,7 +209,6 @@ const CreatePost = () => {
 
           {/* Area Select */}
           <div className="mb-6">
-            {/* @ts-ignore */}
             <Typography
               variant="small"
               color="blue-gray"
@@ -218,7 +216,7 @@ const CreatePost = () => {
             >
               Area
             </Typography>
-            {/* @ts-ignore */}
+
             <Select
               name="area"
               value={formik.values.area} // Store the areaId here
@@ -272,7 +270,7 @@ const CreatePost = () => {
           </div>
 
           {/* Submit Button */}
-          {/* @ts-ignore */}
+
           <Button className="mt-6" fullWidth type="submit">
             Create Post
           </Button>

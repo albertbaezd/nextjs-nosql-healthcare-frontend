@@ -17,64 +17,32 @@ export function Posts() {
   useEffect(() => {
     const fetchPostsWithAuthors = async () => {
       try {
-        // Fetch all posts from the new URL
+        // Fetch posts from the API with the desired limit
         const postsResponse = await apiClient.get<PostBackend>(
           `/posts/latest?limit=6`
         );
         const posts = postsResponse.data.posts;
 
-        // Fetch the authors for each post
-        const mappedPosts = await Promise.all(
-          posts.map(async (post: any) => {
-            try {
-              // Fetch the author by their ID from the correct route
-              const authorResponse = await apiClient.get<Author>(
-                `/users/${post.authorId}`
-              );
-              const author = authorResponse.data;
+        // Map the posts and directly format them with the author included
+        const mappedPosts = posts.map((post: any) => ({
+          id: post._id,
+          image: post.image,
+          area: post.area,
+          title: post.title,
+          description: post.description,
+          author: {
+            name: post.author.name, // Directly use embedded author data
+            id: post.author.id,
+            profilePicture: post.author.profilePicture || "", // Fallback if no profile picture
+          },
+          createdAt: formatDate(post.createdAt),
+        }));
 
-              // Return the post with the updated author information
-              return {
-                id: post._id,
-                image: post.image,
-                area: post.area,
-                title: post.title,
-                description: post.description,
-                author: {
-                  name: author.name, // Assuming author has a 'name' field
-                  id: post.authorId,
-                  profilePicture: author.profilePicture || "", // Assuming author has a 'profilePicture' field
-                },
-                createdAt: formatDate(post.createdAt),
-              };
-            } catch (error) {
-              console.error(
-                `Error fetching author for post ${post.title}:`,
-                error
-              );
-              // Handle the case where author fetching fails, you might set default values
-              return {
-                image: post.image,
-                area: post.area,
-                title: post.title,
-                description: post.description,
-                author: {
-                  name: "Unknown", // Fallback if author data isn't found
-                  id: post.authorId,
-                  profilePicture: "", // Default if no profile picture found
-                },
-                createdAt: post.createdAt,
-              };
-            }
-          })
-        );
-
-        // Set the mapped posts with author details
-        // @ts-ignore
+        // Set the state with the formatted posts
         setPosts(mappedPosts);
+        setLoading(false); // Set loading to false after posts are fetched
 
         console.log("posts with authors:", mappedPosts);
-        setLoading(false); // Set loading to false after data is fetched
       } catch (error) {
         console.error("Error fetching posts:", error);
         setLoading(false); // Set loading to false even if there's an error
@@ -94,15 +62,14 @@ export function Posts() {
 
   return (
     <section className="grid min-h-screen place-items-center p-8">
-      {/* @ts-ignore */}
       <Typography variant="h6" className="mb-2">
         Newest posts
       </Typography>
-      {/* @ts-ignore */}
+
       <Typography variant="h1" className="mb-2">
         Read our latest stories!
       </Typography>
-      {/* @ts-ignore */}
+
       <Typography
         variant="lead"
         color="gray"
