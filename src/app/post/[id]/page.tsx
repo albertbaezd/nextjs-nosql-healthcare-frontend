@@ -297,7 +297,7 @@ function Post() {
               <div className="mb-10 py-6">
                 <div className="flex w-full flex-col items-start">
                   <Typography className="mb-2 font-normal text-black-800">
-                    Weldome to this article:
+                    Welcome to this article:
                   </Typography>
 
                   <Typography className="font-medium text-blue-gray-500">
