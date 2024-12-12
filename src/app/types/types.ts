@@ -24,6 +24,21 @@ export interface Post {
   commentCount?: number;
 }
 
+export interface AreaPost {
+  _id: string;
+  image: string;
+  area: string;
+  title: string;
+  description: string;
+  author: {
+    name: string;
+    id: string;
+    profilePicture?: string;
+  };
+  createdAt: string;
+  commentCount?: number;
+}
+
 interface Comment {
   _id: string;
   author: {

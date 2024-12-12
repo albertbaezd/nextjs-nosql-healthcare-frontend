@@ -66,15 +66,23 @@ const CreatePost = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
-      const areaId = areaEnum[values.area as keyof typeof areaEnum];
-
       try {
         const response = await apiClient.post<PostCreateResponse>(`/posts/`, {
           title: values.title,
           description: values.description,
           body: values.body,
           area: areaEnumReversed[values.area as AreaEnumKeys],
-          areaId: areaId,
+          areaId: values.area,
+          authorId: userContext.userId,
+          image: "https://i.imgur.com/z2u8xvJ.jpeg",
+        });
+
+        console.log("post being created:", {
+          title: values.title,
+          description: values.description,
+          body: values.body,
+          area: areaEnumReversed[values.area as AreaEnumKeys],
+          areaId: values.area,
           authorId: userContext.userId,
           image: "https://i.imgur.com/z2u8xvJ.jpeg",
         });

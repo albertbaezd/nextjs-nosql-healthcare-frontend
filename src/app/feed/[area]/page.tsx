@@ -45,11 +45,13 @@ export default function Campaign() {
       <AreaPosts
         areaId={areaPostsProps.areaId}
         title={areaPostsProps.latestPosts.title}
+        subTitle="Newest Posts"
         description={areaPostsProps.latestPosts.description}
       />
       <AreaPosts
         areaId={areaMostPopularPostsProps.areaId}
         title={areaMostPopularPostsProps.title}
+        subTitle="Most Popular Posts"
         description={areaMostPopularPostsProps.description}
         mostPopular
       />

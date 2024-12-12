@@ -11,6 +11,7 @@ import { useSnackbar } from "notistack";
 import { Input, Button, Typography } from "@material-tailwind/react";
 import Modal from "../../components/modal";
 import { useUser } from "../context/userContext";
+import { setToken } from "@/lib/authToken";
 
 interface userRegisterResponse {
   user: {
@@ -98,7 +99,6 @@ function Register() {
           if (response.status === 201) {
             console.log(response.data);
             enqueueSnackbar("Registration successful", { variant: "success" });
-            router.push("/");
 
             // Updating global user context
             setUserContext({
@@ -116,6 +116,8 @@ function Register() {
               university: response.data.user.university,
               speciality: response.data.user.speciality,
             });
+            setToken(response.data.token);
+            router.push("/");
           } else {
             enqueueSnackbar(`Registration failed, status: ${response.status}`, {
               variant: "error",
